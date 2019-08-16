@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#1.0#0"; "Threed32.OCX"
 Begin VB.Form frmConsultaNumeros 
    BorderStyle     =   1  'Fixed Single
@@ -613,7 +613,7 @@ Private Sub cmdBuscar_Click()
     End If
     
     If Trim(Me.txtNumeroInicial.Text) <> "" Then
-        If Trim(Me.txtNumeroFinal.Text) = "" And Trim(Me.TxtCantidad.Text) = "" Then
+        If Trim(Me.txtNumeroFinal.Text) = "" And Trim(Me.txtCantidad.Text) = "" Then
             MsgBox "Debe seleccionar el número final o la cantidad de registros a encontrar partiendo del número inicial.", vbInformation, App.Title
             Exit Sub
         End If
@@ -661,6 +661,7 @@ Private Sub cmdBuscar_Click()
             Dim varContador As Integer
             Set classWS = New claRequestWs
             
+            
             tipo = "getNumbers"
             Screen.MousePointer = 11
             Set classWS.proConexion = Me.proConexion
@@ -679,9 +680,9 @@ Private Sub cmdBuscar_Click()
             classWS.coleccionPrueba.Add objetoPrueba.country_code, "country_code"
             objetoPrueba.area_code = areaCode
             classWS.coleccionPrueba.Add objetoPrueba.area_code, "area_code"
-            objetoPrueba.consecutive_number = chkConsecutivo.Value
+            objetoPrueba.consecutive_number = ChkConsecutivo.Value
             classWS.coleccionPrueba.Add objetoPrueba.consecutive_number, "consecutive_number"
-            objetoPrueba.quantity_numbers = Me.TxtCantidad.Text
+            objetoPrueba.quantity_numbers = Me.txtCantidad.Text
             classWS.coleccionPrueba.Add objetoPrueba.quantity_numbers, "quantity_numbers"
             objetoPrueba.number_mask = TxtContiene.Text
             classWS.coleccionPrueba.Add objetoPrueba.number_mask, "number_mask"
@@ -725,7 +726,7 @@ Private Sub cmdBuscar_Click()
             Set Me.proNumeros.proConexion = Me.proConexion
             Set Me.proNumeros.proClasificacion = varClasificacion
             
-            Me.proNumeros.proCantidadNumeros = Me.TxtCantidad.Text
+            Me.proNumeros.proCantidadNumeros = Me.txtCantidad.Text
             Me.proNumeros.proEstado = Me.cboCodigoEstado.Text
             Me.proNumeros.proNumeroInicial = Me.txtNumeroInicial.Text
             Me.proNumeros.proNumeroFinal = Me.txtNumeroFinal.Text
@@ -863,7 +864,7 @@ Private Sub cmdLimpiarControles_Click()
     
         Me.txtNumeroInicial.Text = ""
         Me.txtNumeroFinal.Text = ""
-        Me.TxtCantidad.Text = ""
+        Me.txtCantidad.Text = ""
         
         Me.cboNombreEstado.ListIndex = -1
         
@@ -929,9 +930,9 @@ Private Sub Form_Load()
         Me.optNumeroFinal.Value = True
         Me.optCantidad.Value = False
         
-        Me.TxtCantidad.Enabled = False
+        Me.txtCantidad.Enabled = False
         Me.txtNumeroFinal.Enabled = True
-        Me.TxtCantidad.BackColor = &HE0E0E0
+        Me.txtCantidad.BackColor = &HE0E0E0
         Me.txtCantidadSeleccionados.BackColor = Me.lblColorRegistrosSeleccionados.BackColor
         
         Call SubFInicializarGridClasificacion
@@ -1242,12 +1243,12 @@ End Sub
 Private Sub optCantidad_Click()
     On Error GoTo ErrManager
     
-        Me.TxtCantidad.Enabled = True
+        Me.txtCantidad.Enabled = True
         Me.txtNumeroFinal.Enabled = False
         Me.txtNumeroFinal.Text = ""
         Me.txtNumeroFinal.BackColor = &HE0E0E0
-        Me.TxtCantidad.BackColor = &HFFFFFF
-        Me.TxtCantidad.SetFocus
+        Me.txtCantidad.BackColor = &HFFFFFF
+        Me.txtCantidad.SetFocus
     
     Exit Sub
 ErrManager:
@@ -1258,10 +1259,10 @@ Private Sub optNumeroFinal_Click()
     On Error GoTo ErrManager
     
         Me.txtNumeroFinal.Enabled = True
-        Me.TxtCantidad.Enabled = False
-        Me.TxtCantidad.Text = ""
+        Me.txtCantidad.Enabled = False
+        Me.txtCantidad.Text = ""
         Me.txtNumeroFinal.BackColor = &HFFFFFF
-        Me.TxtCantidad.BackColor = &HE0E0E0
+        Me.txtCantidad.BackColor = &HE0E0E0
         Me.txtNumeroFinal.SetFocus
     
     Exit Sub
@@ -1272,8 +1273,8 @@ End Sub
 Private Sub txtCantidad_GotFocus()
     On Error GoTo ErrManager
     
-        Me.TxtCantidad.SelStart = 0
-        Me.TxtCantidad.SelLength = Len(Me.TxtCantidad.Text)
+        Me.txtCantidad.SelStart = 0
+        Me.txtCantidad.SelLength = Len(Me.txtCantidad.Text)
     
     Exit Sub
 ErrManager:
@@ -1293,8 +1294,8 @@ End Sub
 Private Sub txtCantidad_Validate(Cancel As Boolean)
     On Error GoTo ErrManager
     
-    If Trim(Me.TxtCantidad.Text) <> "" Then
-        If CDbl(Trim(Me.TxtCantidad.Text)) > 32000 Or CDbl(Trim(Me.TxtCantidad.Text)) <= 0 Then
+    If Trim(Me.txtCantidad.Text) <> "" Then
+        If CDbl(Trim(Me.txtCantidad.Text)) > 32000 Or CDbl(Trim(Me.txtCantidad.Text)) <= 0 Then
             MsgBox "El valor debe ser entre 1 y 32000.", vbInformation, App.Title
             Cancel = True
         End If
