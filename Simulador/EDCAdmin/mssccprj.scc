@@ -1,0 +1,5 @@
+SCC = This is a Source Code Control file
+
+[EDCAdmin.vbp]
+SCC_Aux_Path = "\\colbtavss01\VSS\"
+SCC_Project_Name = "$/CRM/Tab Telefonia/Simulador/EDCAdmin", EQMIAAAA
