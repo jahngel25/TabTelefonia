@@ -4,14 +4,14 @@ Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#1.0#0"; "Threed32.OCX"
 Begin VB.Form frmConsultaNumeros 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Consultas de números"
-   ClientHeight    =   9540
+   ClientHeight    =   9615
    ClientLeft      =   3045
    ClientTop       =   990
    ClientWidth     =   9330
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   9540
+   ScaleHeight     =   9615
    ScaleWidth      =   9330
    Begin VB.CommandButton cmdCambiarEstado 
       Caption         =   "Ca&mbiar Estado"
@@ -25,7 +25,7 @@ Begin VB.Form frmConsultaNumeros
       Height          =   675
       Left            =   0
       TabIndex        =   40
-      Top             =   9150
+      Top             =   9120
       Width           =   9315
       _Version        =   65536
       _ExtentX        =   16431
@@ -96,15 +96,16 @@ Begin VB.Form frmConsultaNumeros
       BorderWidth     =   2
       BevelOuter      =   1
       Begin MSFlexGridLib.MSFlexGrid grdNumeros 
-         Height          =   5715
+         Height          =   5355
          Left            =   0
          TabIndex        =   17
          Top             =   240
          Width           =   9315
          _ExtentX        =   16431
-         _ExtentY        =   10081
+         _ExtentY        =   9446
          _Version        =   393216
          FixedCols       =   0
+         AllowBigSelection=   0   'False
          SelectionMode   =   1
          AllowUserResizing=   1
       End
@@ -137,7 +138,7 @@ Begin VB.Form frmConsultaNumeros
       Height          =   3225
       Left            =   0
       TabIndex        =   23
-      Top             =   270
+      Top             =   360
       Width           =   9315
       _Version        =   65536
       _ExtentX        =   16431
@@ -350,10 +351,10 @@ Begin VB.Form frmConsultaNumeros
       End
       Begin VB.ComboBox cboCodigoEstado 
          Height          =   315
-         Left            =   1710
+         Left            =   1680
          Style           =   2  'Dropdown List
          TabIndex        =   31
-         Top             =   450
+         Top             =   480
          Visible         =   0   'False
          Width           =   765
       End
@@ -590,6 +591,16 @@ End Sub
 Private Sub cmdBuscar_Click()
     On Error GoTo ErrManager
     
+    Dim Script As String
+    Dim ScriptCity As String
+    Dim ScriptNombre As String
+    Dim cityCode As String
+    Dim areaCode As String
+    Dim strEstado As String
+    Dim varResultados As ADODB.Recordset
+    Dim varResultadosCity As ADODB.Recordset
+    Dim varResultadosEstado As ADODB.Recordset
+    
     'Validar los parámetros seleccionados
     If Me.cboCodigoCiudad.Text = "" Then
         MsgBox "Debe seleccionar la ciudad a buscar.", vbInformation, App.Title
@@ -602,68 +613,137 @@ Private Sub cmdBuscar_Click()
     End If
     
     If Trim(Me.txtNumeroInicial.Text) <> "" Then
-        If Trim(Me.txtNumeroFinal.Text) = "" And Trim(Me.txtCantidad.Text) = "" Then
+        If Trim(Me.txtNumeroFinal.Text) = "" And Trim(Me.TxtCantidad.Text) = "" Then
             MsgBox "Debe seleccionar el número final o la cantidad de registros a encontrar partiendo del número inicial.", vbInformation, App.Title
             Exit Sub
         End If
     End If
     
+    Set varResultados = New ADODB.Recordset
+    Script = "SELECT vchMetododAtributo " & _
+                 "FROM AtributosSoapWebService " & _
+                 "WHERE vchMetodo = 'NetCracker'"
     
-    Screen.MousePointer = 11
+    varResultados.Open Script, Me.proConexion
     
-    Set Me.proNumeros = Nothing
-    Set Me.proNumeros = New colNumero
-    Set Me.proNumeros.proConexion = Me.proConexion
-    Set Me.proNumeros.proClasificacion = varClasificacion
+    Set varResultadosCity = New ADODB.Recordset
     
-    Me.proNumeros.proCantidadNumeros = Me.txtCantidad.Text
-    Me.proNumeros.proEstado = Me.cboCodigoEstado.Text
-    Me.proNumeros.proNumeroInicial = Me.txtNumeroInicial.Text
-    Me.proNumeros.proNumeroFinal = Me.txtNumeroFinal.Text
-    Me.proNumeros.proRegionCode = Me.cboCodigoCiudad.Text
-    Me.proNumeros.proUsarConjuntoClasificaciones = Me.chkClasificaciones.Value
+    ScriptCity = "SELECT " & _
+                 "Ind.vchCodRegion, " & _
+                 "Ind.vchIndicativo, " & _
+                 "SUBSTRING (Ciu.vchCodigoCiudad , 1, 5) As vchCodigoCiudad " & _
+                 "FROM " & _
+                 "CT_IndicativoCiudadROC Ind " & _
+                 "INNER JOIN ct_CiudadDANE Ciu " & _
+                 "ON Ind.vchCityName = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Ciu.vchCiudad, 'Á', 'A'), 'É','E'), 'Í', 'I'), 'Ó', 'O'), 'Ú','U') " & _
+                 "WHERE Ind.vchCodRegion = " & Chr(39) & cboCodigoCiudad.Text & Chr(39) & " "
+                 
+    varResultadosCity.Open ScriptCity, Me.proConexion
+    
+    Set varResultadosEstado = New ADODB.Recordset
+    
+    ScriptNombre = "SELECT vchEstadoNetCracker FROM EstadoNetCracker WHERE vchEstadoOnyx = " & Chr(39) & cboCodigoEstado.Text & Chr(39)
+    
+    varResultadosEstado.Open ScriptNombre, Me.proConexion
+    
+    cityCode = varResultadosCity("vchCodigoCiudad")
+    areaCode = varResultadosCity("vchIndicativo")
+    strEstado = varResultadosEstado("vchEstadoNetCracker")
+    
+    
+    While varResultados.EOF = False
+        If (varResultados("vchMetododAtributo") = "true") Then
         
-    If Me.proNumeros.MetConsultarNumeros Then
-        Call SubFPintarGridNumeros
-    Else
-        MsgBox "Error al consultar los números.", vbCritical, App.Title
-        Screen.MousePointer = 0
-        Exit Sub
-    End If
-    
-    Dim resultWS As Object
-    Dim Tipo As String
-    Dim classWS As claRequestWs
-    Set classWS = New claRequestWs
+            Dim resultWS As Object
+            Dim tipo As String
+            Dim classWS As claRequestWs
+            Dim objetoPrueba As claRequestWs
+            Dim varContador As Integer
+            Set classWS = New claRequestWs
+            
+            tipo = "getNumbers"
+            Screen.MousePointer = 11
+            Set classWS.proConexion = Me.proConexion
+            Set objetoPrueba = New claRequestWs
+            Set classWS.coleccionPrueba = New Collection
+            
+            objetoPrueba.crm_in_use = "TCRM"
+            classWS.coleccionPrueba.Add objetoPrueba.crm_in_use, "crm_in_use"
+            objetoPrueba.request_id = "Example_PMO-001"
+            classWS.coleccionPrueba.Add objetoPrueba.request_id, "request_id"
+            objetoPrueba.transaction_id = "Example_PMO-001"
+            classWS.coleccionPrueba.Add objetoPrueba.transaction_id, "transaction_id"
+            objetoPrueba.city_code = cityCode
+            classWS.coleccionPrueba.Add objetoPrueba.city_code, "city_code"
+            objetoPrueba.country_code = "57"
+            classWS.coleccionPrueba.Add objetoPrueba.country_code, "country_code"
+            objetoPrueba.area_code = areaCode
+            classWS.coleccionPrueba.Add objetoPrueba.area_code, "area_code"
+            objetoPrueba.consecutive_number = chkConsecutivo.Value
+            classWS.coleccionPrueba.Add objetoPrueba.consecutive_number, "consecutive_number"
+            objetoPrueba.quantity_numbers = Me.TxtCantidad.Text
+            classWS.coleccionPrueba.Add objetoPrueba.quantity_numbers, "quantity_numbers"
+            objetoPrueba.number_mask = TxtContiene.Text
+            classWS.coleccionPrueba.Add objetoPrueba.number_mask, "number_mask"
+            objetoPrueba.initial_number = Me.txtNumeroInicial.Text
+            classWS.coleccionPrueba.Add objetoPrueba.initial_number, "initial_number"
+            objetoPrueba.final_number = Me.txtNumeroInicial.Text
+            classWS.coleccionPrueba.Add objetoPrueba.final_number, "final_number"
+            objetoPrueba.category = ""
+            classWS.coleccionPrueba.Add objetoPrueba.category, "category"
+            objetoPrueba.status = strEstado
+            classWS.coleccionPrueba.Add objetoPrueba.status, "status"
+            
+            classWS.coleccionPrueba.Add objetoPrueba
+            Set resultWS = classWS.RequestPeticionWs(tipo)
+            
+            Me.grdNumeros.rows = 1
+            Me.grdNumeros.Redraw = False
+            
+            For varContador = 1 To resultWS.Count
+                Me.grdNumeros.AddItem resultWS.Item("item" & varContador).Item(1).Item("number") & vbTab & _
+                                      resultWS.Item("item" & varContador).Item(1).Item("number") & vbTab & _
+                                      resultWS.Item("item" & varContador).Item(1).Item("number") & vbTab & _
+                                      resultWS.Item("item" & varContador).Item(1).Item("number") & vbTab & _
+                                      resultWS.Item("item" & varContador).Item(1).Item("status") & vbTab & _
+                                      resultWS.Item("item" & varContador).Item(1).Item("status") & vbTab & _
+                                      resultWS.Item("item" & varContador).Item(1).Item("city_code") & vbTab & _
+                                      resultWS.Item("item" & varContador).Item(1).Item("core_network_element") & vbTab & _
+                                      resultWS.Item("item" & varContador).Item(1).Item("core_network_element")
+                              
+            Next varContador
+            
+            Me.grdNumeros.Row = 0
+            Me.grdNumeros.Col = 0
+            Me.grdNumeros.Redraw = True
+                        
+        Else
         
-    Tipo = "getNumbers"
-    Set classWS.proConexion = Me.proConexion
-    classWS.str_crm_in_use = "TCRM"
-    classWS.str_request_id = "Example_PMO_Assign_3090001"
-    classWS.str_transaction_id = "Example_PMO_Assign_3090001"
-    classWS.str_area_code = "1"
-    classWS.str_country_code = "57"
-    classWS.str_customer_name = "Pruebas PMO Inspira CLARO"
-    classWS.str_customer_id = "Client 101800000"
-    classWS.str_customer_id_type = "CC"
-    classWS.str_account_id = "101800000"
-    classWS.str_customer_location = "Address Client # 101800000"
-    classWS.str_number = "3000000"
-    classWS.str_crm_in_use = "TCRM"
-    classWS.str_request_id = "0000001"
-    classWS.str_area_code = "1"
-    classWS.str_country_code = "57"
-    classWS.str_city_code = "11001"
-    classWS.str_consecutive_number = "false"
-    classWS.str_quantity_numbers = "8"
-    classWS.str_transaction_id = "ao_gt38"
-    classWS.str_number_mask = "####33#"
-    classWS.str_initial_number = "0000000"
-    classWS.str_final_number = "9999999"
-    classWS.str_category = ""
-    classWS.str_status = ""
-    resultWS = classWS.RequestPeticionWs(Tipo)
-    
+            Screen.MousePointer = 11
+            Set Me.proNumeros = Nothing
+            Set Me.proNumeros = New colNumero
+            Set Me.proNumeros.proConexion = Me.proConexion
+            Set Me.proNumeros.proClasificacion = varClasificacion
+            
+            Me.proNumeros.proCantidadNumeros = Me.TxtCantidad.Text
+            Me.proNumeros.proEstado = Me.cboCodigoEstado.Text
+            Me.proNumeros.proNumeroInicial = Me.txtNumeroInicial.Text
+            Me.proNumeros.proNumeroFinal = Me.txtNumeroFinal.Text
+            Me.proNumeros.proRegionCode = Me.cboCodigoCiudad.Text
+            Me.proNumeros.proUsarConjuntoClasificaciones = Me.chkClasificaciones.Value
+                
+            If Me.proNumeros.MetConsultarNumeros Then
+                Call SubFPintarGridNumeros
+            Else
+                MsgBox "Error al consultar los números.", vbCritical, App.Title
+                Screen.MousePointer = 0
+                Exit Sub
+            End If
+            
+        End If
+        varResultados.MoveNext
+    Wend
+   
     Screen.MousePointer = 0
     Exit Sub
 ErrManager:
@@ -783,7 +863,7 @@ Private Sub cmdLimpiarControles_Click()
     
         Me.txtNumeroInicial.Text = ""
         Me.txtNumeroFinal.Text = ""
-        Me.txtCantidad.Text = ""
+        Me.TxtCantidad.Text = ""
         
         Me.cboNombreEstado.ListIndex = -1
         
@@ -849,9 +929,9 @@ Private Sub Form_Load()
         Me.optNumeroFinal.Value = True
         Me.optCantidad.Value = False
         
-        Me.txtCantidad.Enabled = False
+        Me.TxtCantidad.Enabled = False
         Me.txtNumeroFinal.Enabled = True
-        Me.txtCantidad.BackColor = &HE0E0E0
+        Me.TxtCantidad.BackColor = &HE0E0E0
         Me.txtCantidadSeleccionados.BackColor = Me.lblColorRegistrosSeleccionados.BackColor
         
         Call SubFInicializarGridClasificacion
@@ -1162,12 +1242,12 @@ End Sub
 Private Sub optCantidad_Click()
     On Error GoTo ErrManager
     
-        Me.txtCantidad.Enabled = True
+        Me.TxtCantidad.Enabled = True
         Me.txtNumeroFinal.Enabled = False
         Me.txtNumeroFinal.Text = ""
         Me.txtNumeroFinal.BackColor = &HE0E0E0
-        Me.txtCantidad.BackColor = &HFFFFFF
-        Me.txtCantidad.SetFocus
+        Me.TxtCantidad.BackColor = &HFFFFFF
+        Me.TxtCantidad.SetFocus
     
     Exit Sub
 ErrManager:
@@ -1178,10 +1258,10 @@ Private Sub optNumeroFinal_Click()
     On Error GoTo ErrManager
     
         Me.txtNumeroFinal.Enabled = True
-        Me.txtCantidad.Enabled = False
-        Me.txtCantidad.Text = ""
+        Me.TxtCantidad.Enabled = False
+        Me.TxtCantidad.Text = ""
         Me.txtNumeroFinal.BackColor = &HFFFFFF
-        Me.txtCantidad.BackColor = &HE0E0E0
+        Me.TxtCantidad.BackColor = &HE0E0E0
         Me.txtNumeroFinal.SetFocus
     
     Exit Sub
@@ -1192,8 +1272,8 @@ End Sub
 Private Sub txtCantidad_GotFocus()
     On Error GoTo ErrManager
     
-        Me.txtCantidad.SelStart = 0
-        Me.txtCantidad.SelLength = Len(Me.txtCantidad.Text)
+        Me.TxtCantidad.SelStart = 0
+        Me.TxtCantidad.SelLength = Len(Me.TxtCantidad.Text)
     
     Exit Sub
 ErrManager:
@@ -1213,8 +1293,8 @@ End Sub
 Private Sub txtCantidad_Validate(Cancel As Boolean)
     On Error GoTo ErrManager
     
-    If Trim(Me.txtCantidad.Text) <> "" Then
-        If CDbl(Trim(Me.txtCantidad.Text)) > 32000 Or CDbl(Trim(Me.txtCantidad.Text)) <= 0 Then
+    If Trim(Me.TxtCantidad.Text) <> "" Then
+        If CDbl(Trim(Me.TxtCantidad.Text)) > 32000 Or CDbl(Trim(Me.TxtCantidad.Text)) <= 0 Then
             MsgBox "El valor debe ser entre 1 y 32000.", vbInformation, App.Title
             Cancel = True
         End If

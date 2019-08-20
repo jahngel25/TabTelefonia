@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#1.0#0"; "Threed32.OCX"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmDetalleDatosProducto 
    BorderStyle     =   1  'Fixed Single
@@ -1028,6 +1028,7 @@ Begin VB.Form frmDetalleDatosProducto
       _ExtentY        =   16907
       _Version        =   393216
       Style           =   1
+      Tab             =   2
       TabHeight       =   520
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Arial"
@@ -1040,38 +1041,37 @@ Begin VB.Form frmDetalleDatosProducto
       EndProperty
       TabCaption(0)   =   "TIPOS DE LINEA"
       TabPicture(0)   =   "frmDetalleDatosProducto.frx":0D22
-      Tab(0).ControlEnabled=   -1  'True
-      Tab(0).Control(0)=   "lblSeccion(0)"
-      Tab(0).Control(0).Enabled=   0   'False
-      Tab(0).Control(1)=   "fraFondoModificacion"
-      Tab(0).Control(1).Enabled=   0   'False
-      Tab(0).Control(2)=   "fraFondoProductos(0)"
-      Tab(0).Control(2).Enabled=   0   'False
-      Tab(0).Control(3)=   "pnlFuerte"
-      Tab(0).Control(3).Enabled=   0   'False
-      Tab(0).Control(4)=   "pnlTenue"
-      Tab(0).Control(4).Enabled=   0   'False
-      Tab(0).Control(5)=   "SSPanel2(0)"
-      Tab(0).Control(5).Enabled=   0   'False
+      Tab(0).ControlEnabled=   0   'False
+      Tab(0).Control(0)=   "SSPanel2(0)"
+      Tab(0).Control(1)=   "pnlTenue"
+      Tab(0).Control(2)=   "pnlFuerte"
+      Tab(0).Control(3)=   "fraFondoProductos(0)"
+      Tab(0).Control(4)=   "fraFondoModificacion"
+      Tab(0).Control(5)=   "lblSeccion(0)"
       Tab(0).ControlCount=   6
       TabCaption(1)   =   "NUMERACION PRIVADA"
       TabPicture(1)   =   "frmDetalleDatosProducto.frx":0D3E
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "lblSeccion(1)"
-      Tab(1).Control(1)=   "fraFondoProductos(1)"
-      Tab(1).Control(2)=   "Frame2(0)"
-      Tab(1).Control(3)=   "SSPanel2(1)"
-      Tab(1).Control(4)=   "SSPanel4"
-      Tab(1).Control(5)=   "cmdRefrescarPlanesNumeracion"
+      Tab(1).Control(0)=   "cmdRefrescarPlanesNumeracion"
+      Tab(1).Control(1)=   "SSPanel4"
+      Tab(1).Control(2)=   "SSPanel2(1)"
+      Tab(1).Control(3)=   "Frame2(0)"
+      Tab(1).Control(4)=   "fraFondoProductos(1)"
+      Tab(1).Control(5)=   "lblSeccion(1)"
       Tab(1).ControlCount=   6
       TabCaption(2)   =   "NUMERACION PUBLICA"
       TabPicture(2)   =   "frmDetalleDatosProducto.frx":0D5A
-      Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "SSPanel2(2)"
-      Tab(2).Control(1)=   "Frame2(1)"
+      Tab(2).ControlEnabled=   -1  'True
+      Tab(2).Control(0)=   "lblSeccion(2)"
+      Tab(2).Control(0).Enabled=   0   'False
+      Tab(2).Control(1)=   "fraFondoProductos(2)"
+      Tab(2).Control(1).Enabled=   0   'False
       Tab(2).Control(2)=   "SSPanel5"
-      Tab(2).Control(3)=   "fraFondoProductos(2)"
-      Tab(2).Control(4)=   "lblSeccion(2)"
+      Tab(2).Control(2).Enabled=   0   'False
+      Tab(2).Control(3)=   "Frame2(1)"
+      Tab(2).Control(3).Enabled=   0   'False
+      Tab(2).Control(4)=   "SSPanel2(2)"
+      Tab(2).Control(4).Enabled=   0   'False
       Tab(2).ControlCount=   5
       Begin VB.ComboBox Combo1 
          Height          =   315
@@ -1094,7 +1094,7 @@ Begin VB.Form frmDetalleDatosProducto
       Begin Threed.SSPanel SSPanel2 
          Height          =   435
          Index           =   2
-         Left            =   -69060
+         Left            =   5940
          TabIndex        =   187
          Top             =   4440
          Width           =   3975
@@ -1156,7 +1156,7 @@ Begin VB.Form frmDetalleDatosProducto
          BackColor       =   &H00C09258&
          Height          =   5145
          Index           =   1
-         Left            =   -74940
+         Left            =   60
          TabIndex        =   165
          Top             =   4350
          Width           =   9405
@@ -1481,7 +1481,7 @@ Begin VB.Form frmDetalleDatosProducto
       End
       Begin Threed.SSPanel SSPanel5 
          Height          =   8805
-         Left            =   -65280
+         Left            =   9720
          TabIndex        =   162
          Top             =   690
          Width           =   5055
@@ -1567,7 +1567,7 @@ Begin VB.Form frmDetalleDatosProducto
             BackColor       =   13160660
             BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                Name            =   "Arial Narrow"
-               Size            =   8.25
+               Size            =   8.24
                Charset         =   0
                Weight          =   400
                Underline       =   0   'False
@@ -1593,7 +1593,7 @@ Begin VB.Form frmDetalleDatosProducto
          BackColor       =   &H00808080&
          Height          =   3945
          Index           =   2
-         Left            =   -74910
+         Left            =   90
          TabIndex        =   145
          Top             =   360
          Width           =   14835
@@ -1682,7 +1682,7 @@ Begin VB.Form frmDetalleDatosProducto
             BackColor       =   13160660
             BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                Name            =   "Arial Narrow"
-               Size            =   8.25
+               Size            =   8.24
                Charset         =   0
                Weight          =   400
                Underline       =   0   'False
@@ -2696,7 +2696,7 @@ Begin VB.Form frmDetalleDatosProducto
       Begin Threed.SSPanel SSPanel2 
          Height          =   435
          Index           =   0
-         Left            =   10080
+         Left            =   -64920
          TabIndex        =   96
          Top             =   4440
          Width           =   4215
@@ -2756,7 +2756,7 @@ Begin VB.Form frmDetalleDatosProducto
       End
       Begin Threed.SSPanel pnlTenue 
          Height          =   225
-         Left            =   6720
+         Left            =   -68280
          TabIndex        =   58
          Top             =   9210
          Visible         =   0   'False
@@ -2780,7 +2780,7 @@ Begin VB.Form frmDetalleDatosProducto
       End
       Begin Threed.SSPanel pnlFuerte 
          Height          =   225
-         Left            =   6150
+         Left            =   -68850
          TabIndex        =   57
          Top             =   9210
          Visible         =   0   'False
@@ -2806,7 +2806,7 @@ Begin VB.Form frmDetalleDatosProducto
          BackColor       =   &H00808080&
          Height          =   3945
          Index           =   0
-         Left            =   30
+         Left            =   -74970
          TabIndex        =   50
          Top             =   360
          Width           =   14835
@@ -3276,7 +3276,7 @@ Begin VB.Form frmDetalleDatosProducto
       Begin VB.Frame fraFondoModificacion 
          BackColor       =   &H00C09258&
          Height          =   5235
-         Left            =   60
+         Left            =   -74940
          TabIndex        =   52
          Top             =   4320
          Width           =   14775
@@ -3656,7 +3656,7 @@ Begin VB.Form frmDetalleDatosProducto
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Index           =   2
-         Left            =   -71640
+         Left            =   3360
          TabIndex        =   56
          Top             =   30
          Width           =   1875
@@ -3700,7 +3700,7 @@ Begin VB.Form frmDetalleDatosProducto
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Index           =   0
-         Left            =   30
+         Left            =   -74970
          TabIndex        =   54
          Top             =   30
          Width           =   1365

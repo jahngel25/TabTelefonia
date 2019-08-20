@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmAdminVoz 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   " Administración del Sistema de Telefonía"
@@ -35,7 +35,7 @@ Begin VB.Form frmAdminVoz
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   5
             Alignment       =   2
-            TextSave        =   "02:38 p.m."
+            TextSave        =   "3:48 p. m."
          EndProperty
       EndProperty
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -50,15 +50,15 @@ Begin VB.Form frmAdminVoz
    End
    Begin MSComctlLib.Toolbar tlbAdministracion1 
       Align           =   1  'Align Top
-      Height          =   810
+      Height          =   840
       Left            =   0
       TabIndex        =   1
       Top             =   0
       Width           =   13635
       _ExtentX        =   24051
-      _ExtentY        =   1429
-      ButtonWidth     =   3307
-      ButtonHeight    =   1376
+      _ExtentY        =   1482
+      ButtonWidth     =   3757
+      ButtonHeight    =   1429
       Appearance      =   1
       Style           =   1
       ImageList       =   "imlIconos"
@@ -104,15 +104,15 @@ Begin VB.Form frmAdminVoz
    End
    Begin MSComctlLib.Toolbar tlbAdministracion 
       Align           =   1  'Align Top
-      Height          =   810
+      Height          =   840
       Left            =   0
       TabIndex        =   0
-      Top             =   810
+      Top             =   840
       Width           =   13635
       _ExtentX        =   24051
-      _ExtentY        =   1429
-      ButtonWidth     =   3360
-      ButtonHeight    =   1376
+      _ExtentY        =   1482
+      ButtonWidth     =   3704
+      ButtonHeight    =   1429
       Wrappable       =   0   'False
       Appearance      =   1
       Style           =   1
@@ -313,7 +313,7 @@ Private Sub tlbAdministracion_ButtonClick(ByVal Button As MSComctlLib.Button)
     On Error GoTo ErrorManager
 
     'Evalua la presión de botón sobre la barra de botones
-    Select Case Button.Index
+    Select Case Button.index
         Case 1 'Parametros por Producto
             Set frmEdicionParametros.proConexion = Me.proConexion
             frmEdicionParametros.Show vbModal
@@ -347,7 +347,7 @@ Private Sub tlbAdministracion1_ButtonClick(ByVal Button As MSComctlLib.Button)
     On Error GoTo ErrorManager
 
     'Evalua la presión de botón sobre la barra de botones
-    Select Case Button.Index
+    Select Case Button.index
         Case 1 'Administración de Números
             Set frmAdminNumeros.proConexion = Me.proConexion
             frmAdminNumeros.proUsuario = Me.proLogin
@@ -367,8 +367,8 @@ Private Sub tlbAdministracion1_ButtonClick(ByVal Button As MSComctlLib.Button)
             Set frmUsersClasificacion.proConexion = Me.proConexion
             frmUsersClasificacion.Show (vbModal)
         Case 6 'Reglas
-            Set frmRegla.proConexion = Me.proConexion
-            frmRegla.Show (vbModal)
+            Set FrmRegla.proConexion = Me.proConexion
+            FrmRegla.Show (vbModal)
          Case 8 'Serv. Suplementarios
             Set frmServiciosSuplementarios.proConexion = Me.proConexion
             frmServiciosSuplementarios.Show vbModal
