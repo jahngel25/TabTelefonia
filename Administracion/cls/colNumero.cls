@@ -154,20 +154,21 @@ End Sub
 
 Public Function MetGenerarNumeros() As Boolean
     Dim varComando As String
+        
     On Error GoTo ErrManager
     
-    If Not MetAbrirConexion Then
-        MetGenerarNumeros = False
-        Exit Function
-    End If
-    
+    'If Not MetAbrirConexion Then
+        'MetGenerarNumeros = False
+        'Exit Function
+    'End If
+        
     varComando = "EXEC CP_GenerarNumerosPublicos '" & _
                     Me.proRegionCode & "', '" & _
                     Me.proNumeroInicial & "', '" & _
                     Me.proNumeroFinal & "', '" & _
                     Me.proUsuario & "'"
         
-    varConexion.Execute varComando, , adAsyncExecute
+    proConexion.Execute varComando, , adAsyncExecute
     
     MetGenerarNumeros = True
     Exit Function

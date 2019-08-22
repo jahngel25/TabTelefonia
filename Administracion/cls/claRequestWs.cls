@@ -35,8 +35,6 @@ Public category As String
 Public status As String
 Public coleccionPrueba As Collection
 
-
-
 Public Function RequestPeticionWs(tipo As String) As Object
     
     Dim textSOAP As String
@@ -101,7 +99,7 @@ Public Function RequestPeticionWs(tipo As String) As Object
     Set classWS = New claCreateObjectWS
     strWsdl = "http://172.24.42.211:8002/NetCracker/V2.0"
     Set ObjectDataWs = classWS.InformacionWS(textSOAP, tipo, strWsdl, 1563)
-        
+            
     Set RequestPeticionWs = ObjectDataWs
     
     Exit Function

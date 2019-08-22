@@ -29,13 +29,15 @@ Public Function InformacionWS(strSoap, strSOAPAction, strWsdl, strPuerto) As Obj
     Set xmlResponse = Nothing
         
     Set InformacionWS = ObjectWs
-
+    
 End Function
 
 
 Public Function crearJsonGetNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto) As String
     
     countWs = 1
+    Dim validacion As String
+    validacion = "{" & Chr(34) & "item" & countWs & Chr(34) & ": [{"
     dataWS = "{" & Chr(34) & "item" & countWs & Chr(34) & ": [{"
     
     If InvokeWebService(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto) Then
@@ -43,8 +45,15 @@ Public Function crearJsonGetNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse
     Else
         
     End If
-
-    dataWS = Left(dataWS, Len(dataWS) - 14) & "}]}"
+    
+    If (dataWS = validacion) Then
+         dataWS = ""
+         MsgBox "No se encuentra numeros con los filtros seleccionados", , App.Title
+    Else
+        dataWS = Left(dataWS, Len(dataWS) - 14) & "}]}"
+    End If
+    
+    
     
     crearJsonGetNumbers = dataWS
     
@@ -64,6 +73,8 @@ Public Function crearJsonReserveNumbers(strSoap, strSOAPAction, strWsdl, xmlResp
     
     crearJsonAssignNumbers = dataWS
     
+ErrorManager:
+    SubGMuestraError
 End Function
 Public Sub MuestraNodosGetNumbers(ByRef Nodos As MSXML2.IXMLDOMNodeList)
     Dim oNodo As MSXML2.IXMLDOMNode
@@ -87,6 +98,7 @@ Public Sub MuestraNodosGetNumbers(ByRef Nodos As MSXML2.IXMLDOMNodeList)
             MuestraNodosGetNumbers oNodo.childNodes
         End If
         Next oNodo
+        
 End Sub
 Public Sub MuestraNodosReserveNumbers(ByRef Nodos As MSXML2.IXMLDOMNodeList)
     Dim oNodo As MSXML2.IXMLDOMNode
@@ -98,6 +110,7 @@ Public Sub MuestraNodosReserveNumbers(ByRef Nodos As MSXML2.IXMLDOMNodeList)
         MuestraNodosReserveNumbers oNodo.childNodes
       End If
     Next oNodo
+    
 End Sub
 
 

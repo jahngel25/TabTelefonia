@@ -35,7 +35,7 @@ Begin VB.Form frmAdminVoz
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   5
             Alignment       =   2
-            TextSave        =   "3:48 p. m."
+            TextSave        =   "2:33 p. m."
          EndProperty
       EndProperty
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 

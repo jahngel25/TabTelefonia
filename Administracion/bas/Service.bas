@@ -1,9 +1,14 @@
 Attribute VB_Name = "Service"
+Option Explicit
+
+Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
+
 Function InvokeWebService(strSoap, strSOAPAction, strURL, ByRef xmlResponse, strPuerto) As Boolean
 
 Dim xmlhttp As MSXML2.XMLHTTP30
 Dim blnSuccess As Boolean
-
+Dim TimeOutSec As Long
+TimeOutSec = 4
 
 Set xmlhttp = New MSXML2.XMLHTTP30
 xmlhttp.Open "POST", strURL, False
@@ -27,6 +32,4 @@ Set xmlResponse = xmlhttp.responseXML
 InvokeWebService = blnSuccess
 Set xmlhttp = Nothing
 End Function
-
-
 

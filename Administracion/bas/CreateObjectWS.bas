@@ -21,6 +21,8 @@ End Function
 
 Public Function crearJsonGetNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto)
 
+    Dim validacion As String
+    validacion = "{" & Chr(34) & "item" & Count & Chr(34) & ": [{"
     dataWS = "{" & Chr(34) & "item" & Count & Chr(34) & ": [{"
     Count = 1
     
@@ -29,8 +31,14 @@ Public Function crearJsonGetNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse
     Else
         resultWS.Text = "Error"
     End If
-
-    dataWS = Left(dataWS, Len(dataWS) - 14) & "}]}"
+    
+     If (dataWS = validacion) Then
+        dataWS = ""
+        MsgBox "Los filtros selecionados no traen ningun numero", vbInformation, App.Title
+        Exit Sub
+    Else
+        dataWS = Left(dataWS, Len(dataWS) - 14) & "}]}"
+    End If
     
 End Function
 
