@@ -9,6 +9,7 @@ Begin VB.Form frmConsultaNumeros
    ClientTop       =   990
    ClientWidth     =   9330
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   9615
@@ -124,7 +125,7 @@ Begin VB.Form frmConsultaNumeros
          BackColor       =   12620376
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "MS Sans Serif"
-            Size            =   9.76
+            Size            =   9.75
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -403,7 +404,6 @@ Begin VB.Form frmConsultaNumeros
             Height          =   315
             Left            =   1680
             TabIndex        =   7
-            Text            =   "1"
             Top             =   600
             Width           =   1965
          End
@@ -611,6 +611,8 @@ Private Sub cmdBuscar_Click()
     Dim varResultadosNumeros As ADODB.Recordset
     Dim varResultadoNumeroNet As ADODB.Recordset
     
+    
+    
     'Validar los parámetros seleccionados
     If Me.cboCodigoCiudad.Text = "" Then
         MsgBox "Debe seleccionar la ciudad a buscar.", vbInformation, App.Title
@@ -688,10 +690,11 @@ Private Sub cmdBuscar_Click()
             Dim tipo As String
             Dim classWS As claRequestWs
             Dim objetoPrueba As claRequestWs
-            Dim varContador As Integer
+            Dim varContadorObject As Integer
             Dim consecutiveCheck As String
             
             Set classWS = New claRequestWs
+            Set proNumeros = New colNumero
             
             tipo = "getNumbers"
             Screen.MousePointer = 11
@@ -702,7 +705,7 @@ Private Sub cmdBuscar_Click()
             If (ChkConsecutivo.Value = 1) Then
                 consecutiveCheck = "true"
             Else
-                consecutiveCheck = "false"
+                consecutiveCheck = ""
             End If
             
             objetoPrueba.crm_in_use = "TCRM"
@@ -719,7 +722,11 @@ Private Sub cmdBuscar_Click()
             classWS.coleccionPrueba.Add objetoPrueba.area_code, "area_code"
             objetoPrueba.consecutive_number = consecutiveCheck
             classWS.coleccionPrueba.Add objetoPrueba.consecutive_number, "consecutive_number"
-            objetoPrueba.quantity_numbers = Me.txtCantidad.Text
+            If (Me.txtCantidad.Text = "") Then
+                objetoPrueba.quantity_numbers = "1"
+            Else
+                objetoPrueba.quantity_numbers = Me.txtCantidad.Text
+            End If
             classWS.coleccionPrueba.Add objetoPrueba.quantity_numbers, "quantity_numbers"
             objetoPrueba.number_mask = TxtContiene.Text
             classWS.coleccionPrueba.Add objetoPrueba.number_mask, "number_mask"
@@ -743,30 +750,30 @@ Private Sub cmdBuscar_Click()
             Me.grdNumeros.rows = 1
             Me.grdNumeros.Redraw = False
             
-            For varContador = 1 To resultWS.Count
+            For varContadorObject = 1 To resultWS.Count
                                 
                 Dim getNumero As String
-                'Dim ScriptNumeroNet As String
-                getNumero = resultWS.Item("item" & varContador).Item(1).Item("number")
+                getNumero = resultWS.Item("item" & varContadorObject).Item(1).Item("number")
                 
-                'Set varResultadoNumeroNet = New ADODB.Recordset
-                
-                'ScriptNumeroNet = "SELECT chUpdateBy, dtUpdateDate FROM CT_Numeros " & _
-                                  "WHERE vchNumero = " & Chr(39) & Mid(getNumero, 4) & Chr(39) & " AND chRegionCode = " & Chr(39) & cboCodigoCiudad.Text & Chr(39)
-                'varResultadoNumeroNet.Open ScriptNumeroNet, Me.proConexion
-                
-                
-                Me.grdNumeros.AddItem cboCodigoCiudad.Text & vbTab & _
-                                      cboNombreCiudad.Text & vbTab & _
-                                      Mid(getNumero, 4) & vbTab & _
-                                      cboCodigoEstado.Text & vbTab & _
-                                      cboNombreEstado.Text & vbTab & _
-                                      strproClasificacionId & vbTab & _
-                                      proClasificacionDescripcion & vbTab & _
-                                      "" & vbTab & _
-                                      ""
-                              
-            Next varContador
+                proNumeros.Add Me.proConexion, _
+                                1, _
+                                "2019-08-20 17:20:08.830", _
+                                "euo1848a", _
+                                strproClasificacionId, _
+                                proClasificacionDescripcion, _
+                                cboNombreEstado.Text, _
+                                cboCodigoEstado.Text, _
+                                Mid(getNumero, 4), _
+                                cboNombreCiudad.Text, _
+                                cboCodigoCiudad.Text, _
+                                "", _
+                                "", _
+                                "", _
+                                "", _
+                                ""
+            Next varContadorObject
+            
+            Call SubFPintarGridNumeros
             
             Me.grdNumeros.Row = 0
             Me.grdNumeros.Col = 0
