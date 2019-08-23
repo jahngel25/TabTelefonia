@@ -45,6 +45,7 @@ On Error GoTo ErrorManager
         
     ApplicationName = "Administracion de Telefonia Vers. 3.7.3"
     
+    
     'Cadena de conexión
     proConexion.ConnectionString = "driver={SQL Server};" & _
       "server=" & ServerName & ";" & _

@@ -39,6 +39,7 @@ On Error GoTo ErrorManager
     Dim ApplicationName As String
         
     ApplicationName = "Tab de Telefonia Vers. 3.7.3"
+    UserName = UserLogin
     
     'Cadena de conexión
     proConexion.ConnectionString = "driver={SQL Server};" & _

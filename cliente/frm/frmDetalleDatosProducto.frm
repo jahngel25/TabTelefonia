@@ -1042,22 +1042,22 @@ Begin VB.Form frmDetalleDatosProducto
       TabCaption(0)   =   "TIPOS DE LINEA"
       TabPicture(0)   =   "frmDetalleDatosProducto.frx":0D22
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "SSPanel2(0)"
-      Tab(0).Control(1)=   "pnlTenue"
-      Tab(0).Control(2)=   "pnlFuerte"
-      Tab(0).Control(3)=   "fraFondoProductos(0)"
-      Tab(0).Control(4)=   "fraFondoModificacion"
-      Tab(0).Control(5)=   "lblSeccion(0)"
+      Tab(0).Control(0)=   "lblSeccion(0)"
+      Tab(0).Control(1)=   "fraFondoModificacion"
+      Tab(0).Control(2)=   "fraFondoProductos(0)"
+      Tab(0).Control(3)=   "pnlFuerte"
+      Tab(0).Control(4)=   "pnlTenue"
+      Tab(0).Control(5)=   "SSPanel2(0)"
       Tab(0).ControlCount=   6
       TabCaption(1)   =   "NUMERACION PRIVADA"
       TabPicture(1)   =   "frmDetalleDatosProducto.frx":0D3E
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "cmdRefrescarPlanesNumeracion"
-      Tab(1).Control(1)=   "SSPanel4"
-      Tab(1).Control(2)=   "SSPanel2(1)"
-      Tab(1).Control(3)=   "Frame2(0)"
-      Tab(1).Control(4)=   "fraFondoProductos(1)"
-      Tab(1).Control(5)=   "lblSeccion(1)"
+      Tab(1).Control(0)=   "lblSeccion(1)"
+      Tab(1).Control(1)=   "fraFondoProductos(1)"
+      Tab(1).Control(2)=   "Frame2(0)"
+      Tab(1).Control(3)=   "SSPanel2(1)"
+      Tab(1).Control(4)=   "SSPanel4"
+      Tab(1).Control(5)=   "cmdRefrescarPlanesNumeracion"
       Tab(1).ControlCount=   6
       TabCaption(2)   =   "NUMERACION PUBLICA"
       TabPicture(2)   =   "frmDetalleDatosProducto.frx":0D5A
@@ -1567,7 +1567,7 @@ Begin VB.Form frmDetalleDatosProducto
             BackColor       =   13160660
             BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                Name            =   "Arial Narrow"
-               Size            =   8.24
+               Size            =   8.25
                Charset         =   0
                Weight          =   400
                Underline       =   0   'False
@@ -1682,7 +1682,7 @@ Begin VB.Form frmDetalleDatosProducto
             BackColor       =   13160660
             BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                Name            =   "Arial Narrow"
-               Size            =   8.24
+               Size            =   8.25
                Charset         =   0
                Weight          =   400
                Underline       =   0   'False

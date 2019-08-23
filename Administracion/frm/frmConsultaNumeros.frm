@@ -125,7 +125,7 @@ Begin VB.Form frmConsultaNumeros
          BackColor       =   12620376
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "MS Sans Serif"
-            Size            =   9.75
+            Size            =   9.76
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -695,7 +695,6 @@ Private Sub cmdBuscar_Click()
             
             Set classWS = New claRequestWs
             Set proNumeros = New colNumero
-            
             tipo = "getNumbers"
             Screen.MousePointer = 11
             Set classWS.proConexion = Me.proConexion
@@ -753,12 +752,15 @@ Private Sub cmdBuscar_Click()
             For varContadorObject = 1 To resultWS.Count
                                 
                 Dim getNumero As String
+                Dim fechaActual As String
+                                    
+                fechaActual = Now
                 getNumero = resultWS.Item("item" & varContadorObject).Item(1).Item("number")
                 
                 proNumeros.Add Me.proConexion, _
                                 1, _
-                                "2019-08-20 17:20:08.830", _
-                                "euo1848a", _
+                                fechaActual, _
+                                UserName, _
                                 strproClasificacionId, _
                                 proClasificacionDescripcion, _
                                 cboNombreEstado.Text, _

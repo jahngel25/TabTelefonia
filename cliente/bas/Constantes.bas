@@ -6,5 +6,8 @@ Global Const APlicacionId = 20
 Global varGAdministracion As Boolean
 Global varGApruebaNumerosClasificacion As Boolean
 Global varGValidacion As Boolean
+Global UserName As String
+
+
 
 

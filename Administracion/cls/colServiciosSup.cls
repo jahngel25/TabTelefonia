@@ -28,6 +28,8 @@ Public proiServicioSuplementarioId As String
 Public provchNombreServicio As String
 Public prochProductNumber As String
 Public prochTipoServicio As String
+Public User As String
+
 
 Public Function FunGConsulta() As Boolean
 Dim varResultado As ADODB.Recordset
@@ -78,6 +80,7 @@ On Error GoTo ErrorManager
 
    
         'Trae los datos de la base
+        UserName = Me.User
         Set varResultado = New ADODB.Recordset
         Set varServiciosSup = New claServiciosSup
         Set mCol = Nothing

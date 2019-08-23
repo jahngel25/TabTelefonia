@@ -6,3 +6,5 @@ Global Const ConstDolares = 2
 
 Global varGAdminAplicacion As Boolean
 Global varGAdminTelefonia As Boolean
+Global UserName As String
+
