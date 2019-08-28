@@ -16,10 +16,12 @@ Begin VB.Form frmConsultaNumeros
    ScaleWidth      =   9330
    Begin VB.CommandButton cmdCambiarEstado 
       Caption         =   "Ca&mbiar Estado"
+      Enabled         =   0   'False
       Height          =   315
-      Left            =   7320
+      Left            =   7440
       TabIndex        =   43
       Top             =   720
+      Visible         =   0   'False
       Width           =   1500
    End
    Begin Threed.SSPanel SSPanel2 
@@ -125,7 +127,7 @@ Begin VB.Form frmConsultaNumeros
          BackColor       =   12620376
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "MS Sans Serif"
-            Size            =   9.76
+            Size            =   9.75
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -249,6 +251,7 @@ Begin VB.Form frmConsultaNumeros
             Left            =   3510
             TabIndex        =   11
             Top             =   1380
+            Visible         =   0   'False
             Width           =   1935
          End
          Begin VB.CommandButton cmdSeleccionarTodos 
@@ -258,6 +261,7 @@ Begin VB.Form frmConsultaNumeros
             Left            =   3510
             TabIndex        =   10
             Top             =   1080
+            Visible         =   0   'False
             Width           =   1935
          End
          Begin Threed.SSPanel SSPanel3 
@@ -389,7 +393,6 @@ Begin VB.Form frmConsultaNumeros
             Left            =   1440
             TabIndex        =   46
             Top             =   1320
-            Value           =   1  'Checked
             Width           =   2175
          End
          Begin VB.TextBox TxtContiene 
@@ -596,22 +599,7 @@ Private Sub cmdBuscar_Click()
     On Error GoTo ErrManager
     
     Dim Script As String
-    Dim ScriptCity As String
-    Dim ScriptNombre As String
-    Dim ScriptNumeros As String
-    Dim cityCode As String
-    Dim areaCode As String
-    Dim strEstado As String
-    Dim strproClasificacionId As String
-    Dim proClasificacionDescripcion As String
-    Dim strClasificacionNet As String
     Dim varResultados As ADODB.Recordset
-    Dim varResultadosCity As ADODB.Recordset
-    Dim varResultadosEstado As ADODB.Recordset
-    Dim varResultadosNumeros As ADODB.Recordset
-    Dim varResultadoNumeroNet As ADODB.Recordset
-    
-    
     
     'Validar los parámetros seleccionados
     If Me.cboCodigoCiudad.Text = "" Then
@@ -639,148 +627,25 @@ Private Sub cmdBuscar_Click()
                  "WHERE vchMetodo = 'NetCracker'"
     varResultados.Open Script, Me.proConexion
     
-    'consulta para traer el codigo de la cuidad
-    Set varResultadosCity = New ADODB.Recordset
-    ScriptCity = "SELECT " & _
-                 "Ind.vchCodRegion, " & _
-                 "Ind.vchIndicativo, " & _
-                 "SUBSTRING (Ciu.vchCodigoCiudad , 1, 5) As vchCodigoCiudad " & _
-                 "FROM " & _
-                 "CT_IndicativoCiudadROC Ind " & _
-                 "INNER JOIN ct_CiudadDANE Ciu " & _
-                 "ON Ind.vchCityName = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Ciu.vchCiudad, 'Á', 'A'), 'É','E'), 'Í', 'I'), 'Ó', 'O'), 'Ú','U') " & _
-                 "WHERE Ind.vchCodRegion = " & Chr(39) & cboCodigoCiudad.Text & Chr(39) & " "
-    varResultadosCity.Open ScriptCity, Me.proConexion
-    
-    'consulta para conparar la clasificacion de netcraker y onyx
-    If (Me.grdClasificacion.Text = "NUMEROS DORADOS") Then
-        strproClasificacionId = ""
-        proClasificacionDescripcion = ""
-        strClasificacionNet = ""
-    Else
-        Set varResultadosNumeros = New ADODB.Recordset
-        ScriptNumeros = "SELECT cla.iClasificacionId, " & _
-                    "cla.vchClasificacionNet, " & _
-                    "ct.vchClasificacion " & _
-                    "FROM ClasificacionNetCracker cla " & _
-                    "INNER JOIN CT_clasificacion ct " & _
-                    "ON cla.iClasificacionId = ct.iClasificacionId " & _
-                    "WHERE cla.iClasificacionId = " & Me.grdClasificacion.Text
-        varResultadosNumeros.Open ScriptNumeros, Me.proConexion
-        strproClasificacionId = varResultadosNumeros("iClasificacionId")
-        proClasificacionDescripcion = varResultadosNumeros("vchClasificacion")
-        strClasificacionNet = varResultadosNumeros("vchClasificacionNet")
-    End If
-    
-    
-    'consulta para conparar el estado de netcraker y onyx
-    Set varResultadosEstado = New ADODB.Recordset
-    ScriptNombre = "SELECT vchEstadoNetCracker FROM EstadoNetCracker WHERE vchEstadoOnyx = " & Chr(39) & cboCodigoEstado.Text & Chr(39)
-    varResultadosEstado.Open ScriptNombre, Me.proConexion
-    
-    'variables necesarias para el consumo del servicio web
-    cityCode = varResultadosCity("vchCodigoCiudad")
-    areaCode = varResultadosCity("vchIndicativo")
-    strEstado = varResultadosEstado("vchEstadoNetCracker")
-    
     While varResultados.EOF = False
         If (varResultados("vchMetododAtributo") = "true") Then
                     
-            Dim resultWS As Object
-            Dim tipo As String
-            Dim classWS As claRequestWs
-            Dim objetoPrueba As claRequestWs
-            Dim varContadorObject As Integer
-            Dim consecutiveCheck As String
-            
-            Set classWS = New claRequestWs
-            Set proNumeros = New colNumero
-            tipo = "getNumbers"
+            Dim classPeticionWS As claPeticionNetcracker
+            Set classPeticionWS = New claPeticionNetcracker
+            Set classPeticionWS.proConexion = Me.proConexion
             Screen.MousePointer = 11
-            Set classWS.proConexion = Me.proConexion
-            Set objetoPrueba = New claRequestWs
-            Set classWS.coleccionPrueba = New Collection
+            Set Me.proNumeros = Nothing
+            Set Me.proNumeros = New colNumero
             
-            If (ChkConsecutivo.Value = 1) Then
-                consecutiveCheck = "true"
-            Else
-                consecutiveCheck = ""
-            End If
-            
-            objetoPrueba.crm_in_use = "TCRM"
-            classWS.coleccionPrueba.Add objetoPrueba.crm_in_use, "crm_in_use"
-            objetoPrueba.request_id = "Example_PMO-001"
-            classWS.coleccionPrueba.Add objetoPrueba.request_id, "request_id"
-            objetoPrueba.transaction_id = "Example_PMO-001"
-            classWS.coleccionPrueba.Add objetoPrueba.transaction_id, "transaction_id"
-            objetoPrueba.city_code = cityCode
-            classWS.coleccionPrueba.Add objetoPrueba.city_code, "city_code"
-            objetoPrueba.country_code = "57"
-            classWS.coleccionPrueba.Add objetoPrueba.country_code, "country_code"
-            objetoPrueba.area_code = areaCode
-            classWS.coleccionPrueba.Add objetoPrueba.area_code, "area_code"
-            objetoPrueba.consecutive_number = consecutiveCheck
-            classWS.coleccionPrueba.Add objetoPrueba.consecutive_number, "consecutive_number"
-            If (Me.txtCantidad.Text = "") Then
-                objetoPrueba.quantity_numbers = "1"
-            Else
-                objetoPrueba.quantity_numbers = Me.txtCantidad.Text
-            End If
-            classWS.coleccionPrueba.Add objetoPrueba.quantity_numbers, "quantity_numbers"
-            objetoPrueba.number_mask = TxtContiene.Text
-            classWS.coleccionPrueba.Add objetoPrueba.number_mask, "number_mask"
-            objetoPrueba.initial_number = Me.txtNumeroInicial.Text
-            classWS.coleccionPrueba.Add objetoPrueba.initial_number, "initial_number"
-            objetoPrueba.final_number = Me.txtNumeroFinal.Text
-            classWS.coleccionPrueba.Add objetoPrueba.final_number, "final_number"
-            objetoPrueba.category = strClasificacionNet
-            classWS.coleccionPrueba.Add objetoPrueba.category, "category"
-            objetoPrueba.status = strEstado
-            classWS.coleccionPrueba.Add objetoPrueba.status, "status"
-            
-            classWS.coleccionPrueba.Add objetoPrueba
-            Set resultWS = classWS.RequestPeticionWs(tipo)
+            Set Me.proNumeros = classPeticionWS.ParametrosPeticionWs("getNumbers", cboNombreCiudad.Text, cboNombreEstado.Text, "TCRM", "Example_PMO-001", "Example_PMO-001", "1", "57", "", "", "", "", "", "", cboCodigoCiudad.Text, ChkConsecutivo.Value, Me.txtCantidad.Text, TxtContiene.Text, Me.txtNumeroInicial.Text, Me.txtNumeroFinal.Text, Me.grdClasificacion.Text, cboCodigoEstado.Text)
             
             If (dataWS = "") Then
                 Screen.MousePointer = 0
                 Exit Sub
             End If
             
-            Me.grdNumeros.rows = 1
-            Me.grdNumeros.Redraw = False
-            
-            For varContadorObject = 1 To resultWS.Count
-                                
-                Dim getNumero As String
-                Dim fechaActual As String
-                                    
-                fechaActual = Now
-                getNumero = resultWS.Item("item" & varContadorObject).Item(1).Item("number")
-                
-                proNumeros.Add Me.proConexion, _
-                                1, _
-                                fechaActual, _
-                                UserName, _
-                                strproClasificacionId, _
-                                proClasificacionDescripcion, _
-                                cboNombreEstado.Text, _
-                                cboCodigoEstado.Text, _
-                                Mid(getNumero, 4), _
-                                cboNombreCiudad.Text, _
-                                cboCodigoCiudad.Text, _
-                                "", _
-                                "", _
-                                "", _
-                                "", _
-                                ""
-            Next varContadorObject
-            
             Call SubFPintarGridNumeros
-            
-            Me.grdNumeros.Row = 0
-            Me.grdNumeros.Col = 0
-            Me.grdNumeros.Redraw = True
-                        
+                                            
         Else
         
             Screen.MousePointer = 11
@@ -1056,7 +921,7 @@ Private Sub Form_Load()
             Me.lblCantidadRegistrosSeleccion.Caption = "Cantidad Registros"
             Me.cmdClasificar.Visible = True
              '/* 1.0.100  -  Inicio */
-            Me.cmdCambiarEstado.Visible = True
+            Me.cmdCambiarEstado.Visible = False
             '/* 1.0.100  -  Fin */
         Else
             Me.cmdDeseleccionarTodosNumeros.Visible = True
@@ -1064,7 +929,7 @@ Private Sub Form_Load()
             Me.lblCantidadRegistrosSeleccion.Caption = "Cantidad Registros Seleccionados"
             Me.cmdClasificar.Visible = False
              '/* 1.0.100  -  Inicio */
-            Me.cmdCambiarEstado.Visible = True
+            Me.cmdCambiarEstado.Visible = False
             '/* 1.0.100  -  Fin */
         End If
     Exit Sub

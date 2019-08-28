@@ -123,6 +123,7 @@ Module=CreateObjectWS; ..\bas\CreateObjectWS.bas
 Module=JSON; ..\bas\JSON.bas
 Module=Global; ..\bas\Global.bas
 Module=Service; ..\bas\Service.bas
+Class=claPeticionNetcracker; ..\cls\claPeticionNetcracker.cls
 Startup="(None)"
 HelpFile=""
 Title="EDCAdminVoz"

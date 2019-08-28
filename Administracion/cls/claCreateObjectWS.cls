@@ -66,12 +66,12 @@ Public Function crearJsonReserveNumbers(strSoap, strSOAPAction, strWsdl, xmlResp
     If InvokeWebService(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto) Then
         MuestraNodosReserveNumbers xmlResponse.childNodes
     Else
-        resultWS.Text = "Error"
+        
     End If
     
     dataWS = Left(dataWS, Len(dataWS) - 1) & "}"
     
-    crearJsonAssignNumbers = dataWS
+    crearJsonReserveNumbers = dataWS
     
 ErrorManager:
     SubGMuestraError
