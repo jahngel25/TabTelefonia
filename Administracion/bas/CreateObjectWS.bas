@@ -1,13 +1,13 @@
 Attribute VB_Name = "CreateObjectWS"
-Public Function InformacionWS(strSoap, strSOAPAction, strWsdl, strPuerto) As Object
+Public Function InformacionWS(strSoap, strSOAPAction, strWsdl) As Object
     Dim xmlResponse As MSXML2.DOMDocument30
     Dim ObjectWs As Object
     Dim StringWs As String
     
     If (strSOAPAction = "getNumbers") Then
-        StringWs = crearJsonGetNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto)
+        StringWs = crearJsonGetNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto, content)
     Else
-        StringWs = crearJson(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto)
+        StringWs = crearJson(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto, content)
     End If
     
     Set ObjectWs = JSON.parse(StringWs)
@@ -19,14 +19,14 @@ Public Function InformacionWS(strSoap, strSOAPAction, strWsdl, strPuerto) As Obj
 End Function
 
 
-Public Function crearJsonGetNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto)
+Public Function crearJsonGetNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto, content)
 
     Dim validacion As String
     validacion = "{" & Chr(34) & "item" & Count & Chr(34) & ": [{"
     dataWS = "{" & Chr(34) & "item" & Count & Chr(34) & ": [{"
     Count = 1
     
-    If InvokeWebService(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto) Then
+    If InvokeWebService(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto, content) Then
         MuestraNodosGetNumbers xmlResponse.childNodes
     Else
         resultWS.Text = "Error"
@@ -35,18 +35,18 @@ Public Function crearJsonGetNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse
      If (dataWS = validacion) Then
         dataWS = ""
         MsgBox "Los filtros selecionados no traen ningun numero", vbInformation, App.Title
-        Exit Sub
+        Exit Function
     Else
         dataWS = Left(dataWS, Len(dataWS) - 14) & "}]}"
     End If
     
 End Function
 
-Public Function crearJson(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto)
+Public Function crearJson(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto, content)
 
     dataWS = "{"
 
-    If InvokeWebService(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto) Then
+    If InvokeWebService(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto, content) Then
         MuestraNodos xmlResponse.childNodes
     Else
         resultWS.Text = "Error"

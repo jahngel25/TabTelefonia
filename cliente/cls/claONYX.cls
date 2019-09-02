@@ -40,6 +40,11 @@ On Error GoTo ErrorManager
         
     ApplicationName = "Tab de Telefonia Vers. 3.7.3"
     UserName = UserLogin
+    If Len(Me.AlternateID) > 4 Then
+        IncidentId = Right(Me.AlternateID, Len(Me.AlternateID) - 3)
+    End If
+    ClientId = Me.ContactID
+    
     
     'Cadena de conexión
     proConexion.ConnectionString = "driver={SQL Server};" & _

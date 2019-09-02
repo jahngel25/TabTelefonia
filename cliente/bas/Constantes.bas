@@ -7,6 +7,9 @@ Global varGAdministracion As Boolean
 Global varGApruebaNumerosClasificacion As Boolean
 Global varGValidacion As Boolean
 Global UserName As String
+Global IncidentId As String
+Global ClientId As String
+
 
 
 

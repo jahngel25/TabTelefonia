@@ -15,14 +15,49 @@ Option Explicit
 
 Public proConexion As ADODB.Connection
 Public proNumeros As colNumero
+Dim varCommand As ADODB.Command
 
 Public Function ParametrosPeticionWs(evento As String, city_name As String, estado_name As String, crm_in_use As String, request_id As String, transaction_id As String, area_code As String, country_code As String, customer_name As String, customer_id As String, customer_id_type As String, account_id As String, customer_location As String, number As String, city_code As String, consecutive_number As String, quantity_numbers As String, number_mask As String, initial_number As String, final_number As String, category As String, status As String)
-            
+    
     Select Case evento
         Case "getNumbers"
             Set ParametrosPeticionWs = getNumbers(evento, city_name, estado_name, crm_in_use, request_id, transaction_id, area_code, country_code, customer_name, customer_id, customer_id_type, account_id, customer_location, number, city_code, consecutive_number, quantity_numbers, number_mask, initial_number, final_number, category, status)
+            
+            TipoLog = "Response"
+            CodigoLog = "300"
+            Set varCommand = New ADODB.Command
+            varCommand.CommandType = adCmdStoredProc
+            varCommand.ActiveConnection = Me.proConexion
+            varCommand.CommandText = "SP_InsertarLogNetCracker"
+            varCommand.Parameters.Append varCommand.CreateParameter("@vchTransaccionId", adVarChar, adParamInput, 50, transactionIdNet)
+            varCommand.Parameters.Append varCommand.CreateParameter("@vchEvento", adVarChar, adParamInput, 50, EventoLog)
+            varCommand.Parameters.Append varCommand.CreateParameter("@iIncidentId", adInteger, adParamInput, , IncidentId)
+            varCommand.Parameters.Append varCommand.CreateParameter("@chUseriD", adChar, adParamInput, 10, ClientId)
+            varCommand.Parameters.Append varCommand.CreateParameter("@vchNombreMaquina", adVarChar, adParamInput, 50, NombreMaquinaLog)
+            varCommand.Parameters.Append varCommand.CreateParameter("@vchTrama", adLongVarChar, adParamInput, 2147483647, TramaResponse)
+            varCommand.Parameters.Append varCommand.CreateParameter("@vchTipo", adVarChar, adParamInput, 50, TipoLog)
+            varCommand.Parameters.Append varCommand.CreateParameter("@vchCodigo", adVarChar, adParamInput, 8, CodigoLog)
+            varCommand.Execute
+            
         Case "reserveNumbers"
             Set ParametrosPeticionWs = reserveNumbers(evento, city_name, estado_name, crm_in_use, request_id, transaction_id, area_code, country_code, customer_name, customer_id, customer_id_type, account_id, customer_location, number, city_code, consecutive_number, quantity_numbers, number_mask, initial_number, final_number, category, status)
+            
+            TipoLog = "Response"
+            CodigoLog = ParametrosPeticionWs.Item("code")
+            Set varCommand = New ADODB.Command
+            varCommand.CommandType = adCmdStoredProc
+            varCommand.ActiveConnection = Me.proConexion
+            varCommand.CommandText = "SP_InsertarLogNetCracker"
+            varCommand.Parameters.Append varCommand.CreateParameter("@vchTransaccionId", adVarChar, adParamInput, 50, transactionIdNet)
+            varCommand.Parameters.Append varCommand.CreateParameter("@vchEvento", adVarChar, adParamInput, 50, EventoLog)
+            varCommand.Parameters.Append varCommand.CreateParameter("@iIncidentId", adInteger, adParamInput, , IncidentId)
+            varCommand.Parameters.Append varCommand.CreateParameter("@chUseriD", adChar, adParamInput, 10, ClientId)
+            varCommand.Parameters.Append varCommand.CreateParameter("@vchNombreMaquina", adVarChar, adParamInput, 50, NombreMaquinaLog)
+            varCommand.Parameters.Append varCommand.CreateParameter("@vchTrama", adLongVarChar, adParamInput, 2147483647, TramaResponse)
+            varCommand.Parameters.Append varCommand.CreateParameter("@vchTipo", adVarChar, adParamInput, 50, TipoLog)
+            varCommand.Parameters.Append varCommand.CreateParameter("@vchCodigo", adVarChar, adParamInput, 8, CodigoLog)
+            varCommand.Execute
+            
     End Select
        
 End Function
@@ -149,14 +184,30 @@ Public Function getNumbers(evento As String, city_name As String, estado_name As
                         
         Dim getNumero As String
         Dim fechaActual As String
+        Dim varCtNumeros As ADODB.Recordset
+        Dim ScriptCtNumeros As String
+        Dim chUpdateBy As String
+        Dim dtUpdateDate As String
                             
         fechaActual = Now
         getNumero = resultWS.Item("item" & varContadorObject).Item(1).Item("number")
         
+        Set varCtNumeros = New ADODB.Recordset
+        ScriptCtNumeros = "SELECT chUpdateBy, dtUpdateDate FROM CT_Numeros WHERE vchNumero = " & Chr(39) & Mid(getNumero, 4) & Chr(39)
+        varCtNumeros.Open ScriptCtNumeros, Me.proConexion
+        
+        If Not varCtNumeros.EOF Then
+            chUpdateBy = varCtNumeros("chUpdateBy")
+            dtUpdateDate = varCtNumeros("dtUpdateDate")
+        Else
+            chUpdateBy = fechaActual
+            dtUpdateDate = UserName
+        End If
+        
         proNumeros.Add Me.proConexion, _
                         1, _
-                        fechaActual, _
-                        UserName, _
+                        dtUpdateDate, _
+                        chUpdateBy, _
                         strproClasificacionId, _
                         proClasificacionDescripcion, _
                         estado_name, _
@@ -222,9 +273,6 @@ Public Function reserveNumbers(evento As String, city_name As String, estado_nam
     classWS.coleccionPrueba.Add objetoPrueba.number, "number"
     classWS.coleccionPrueba.Add objetoPrueba
     Set resultWS = classWS.RequestPeticionWs(evento)
-    
-    Dim code As String
-    code = resultWS.Item("code")
     
     If (dataWS = "") Then
         Screen.MousePointer = 0

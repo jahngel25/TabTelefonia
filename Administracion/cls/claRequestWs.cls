@@ -43,9 +43,6 @@ Public Function RequestPeticionWs(tipo As String) As Object
     Dim ObjectDataWs As Object
     Dim Script As String
     Dim classWS As claCreateObjectWS
-    Dim strWsdl As String
-    
-    On Error GoTo ErrorManager
     
     Set varResultados = New ADODB.Recordset
     
@@ -75,12 +72,19 @@ Public Function RequestPeticionWs(tipo As String) As Object
     'Almacena los datos de la base en las propiedades, previa verificacion de no nulidad
     While varResultados.EOF = False
         If (varResultados("vchMetododAtributo") = "number") Then
+        
+            Dim fields() As String
+            Dim i As Integer
+            
+            fields() = Split(coleccionPrueba(varResultados("vchMetododAtributo")), ",")
             textSOAP = textSOAP & "<v1:list_of_numbers>"
-            textSOAP = textSOAP & "<v1:number_element>"
-            If (coleccionPrueba(varResultados("vchMetododAtributo")) <> "") Then
-                textSOAP = textSOAP & "<v1:" & varResultados("vchMetododAtributo") & ">" & coleccionPrueba(varResultados("vchMetododAtributo")) & "</v1:" & varResultados("vchMetododAtributo") & ">"
-            End If
-            textSOAP = textSOAP & "</v1:number_element>"
+            For i = 0 To UBound(fields)
+                textSOAP = textSOAP & "<v1:number_element>"
+                If (coleccionPrueba(varResultados("vchMetododAtributo")) <> "") Then
+                    textSOAP = textSOAP & "<v1:" & varResultados("vchMetododAtributo") & ">" & fields(i) & "</v1:" & varResultados("vchMetododAtributo") & ">"
+                End If
+                textSOAP = textSOAP & "</v1:number_element>"
+            Next
             textSOAP = textSOAP & "</v1:list_of_numbers>"
         Else
             If (coleccionPrueba(varResultados("vchMetododAtributo")) <> "") Then
@@ -97,15 +101,33 @@ Public Function RequestPeticionWs(tipo As String) As Object
     textSOAP = textSOAP & "</soapenv:Envelope>"
 
     Set classWS = New claCreateObjectWS
-    strWsdl = "http://172.24.42.211:8002/NetCracker/V2.0"
-    Set ObjectDataWs = classWS.InformacionWS(textSOAP, tipo, strWsdl, 1563)
+    NombreMaquinaLog = Environ("computername")
+    TramaRequest = textSOAP
+    TipoLog = "Request"
+    EventoLog = tipo
+    CodigoLog = ""
+    
+    Dim varCommand As ADODB.Command
+    Set varCommand = New ADODB.Command
+    varCommand.CommandType = adCmdStoredProc
+    varCommand.ActiveConnection = Me.proConexion
+    varCommand.CommandText = "SP_InsertarLogNetCracker"
+    varCommand.Parameters.Append varCommand.CreateParameter("@vchTransaccionId", adVarChar, adParamInput, 50, transactionIdNet)
+    varCommand.Parameters.Append varCommand.CreateParameter("@vchEvento", adVarChar, adParamInput, 50, EventoLog)
+    varCommand.Parameters.Append varCommand.CreateParameter("@iIncidentId", adInteger, adParamInput, , IncidentId)
+    varCommand.Parameters.Append varCommand.CreateParameter("@chUseriD", adChar, adParamInput, 10, ClientId)
+    varCommand.Parameters.Append varCommand.CreateParameter("@vchNombreMaquina", adVarChar, adParamInput, 50, NombreMaquinaLog)
+    varCommand.Parameters.Append varCommand.CreateParameter("@vchTrama", adVarChar, adParamInput, 3500, TramaRequest)
+    varCommand.Parameters.Append varCommand.CreateParameter("@vchTipo", adVarChar, adParamInput, 50, TipoLog)
+    varCommand.Parameters.Append varCommand.CreateParameter("@vchCodigo", adVarChar, adParamInput, 8, CodigoLog)
+    varCommand.Execute
+    
+    Set ObjectDataWs = classWS.InformacionWS(textSOAP, tipo, "http://172.24.42.211:8002/NetCracker/V2.0")
             
     Set RequestPeticionWs = ObjectDataWs
-    
+        
     Exit Function
     
-ErrorManager:
-    SubGMuestraError
 End Function
 
 

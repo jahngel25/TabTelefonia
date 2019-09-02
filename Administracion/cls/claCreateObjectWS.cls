@@ -13,15 +13,15 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Function InformacionWS(strSoap, strSOAPAction, strWsdl, strPuerto) As Object
+Public Function InformacionWS(strSoap, strSOAPAction, strWsdl) As Object
     Dim xmlResponse As MSXML2.DOMDocument30
     Dim ObjectWs As Object
     Dim StringWs As String
     
     If (strSOAPAction = "getNumbers") Then
-        StringWs = crearJsonGetNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto)
+        StringWs = crearJsonGetNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse, "1145")
     Else
-        StringWs = crearJsonReserveNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse, strPuerto)
+        StringWs = crearJsonReserveNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse, "1320")
     End If
     
     Set ObjectWs = JSON.parse(StringWs)
@@ -73,8 +73,6 @@ Public Function crearJsonReserveNumbers(strSoap, strSOAPAction, strWsdl, xmlResp
     
     crearJsonReserveNumbers = dataWS
     
-ErrorManager:
-    SubGMuestraError
 End Function
 Public Sub MuestraNodosGetNumbers(ByRef Nodos As MSXML2.IXMLDOMNodeList)
     Dim oNodo As MSXML2.IXMLDOMNode
