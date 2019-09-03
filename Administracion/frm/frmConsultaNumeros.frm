@@ -619,7 +619,6 @@ Private Sub cmdBuscar_Click()
         End If
     End If
 
-    
     'Consulta para la validacion de que flujo seguir
     Set varResultados = New ADODB.Recordset
     Script = "SELECT vchMetododAtributo " & _
@@ -636,7 +635,6 @@ Private Sub cmdBuscar_Click()
             Screen.MousePointer = 11
             Set Me.proNumeros = Nothing
             Set Me.proNumeros = New colNumero
-            
             Set Me.proNumeros = classPeticionWS.ParametrosPeticionWs("getNumbers", cboNombreCiudad.Text, cboNombreEstado.Text, "TCRM", "Example_PMO-001", "Example_PMO-001", "1", "57", "", "", "", "", "", "", cboCodigoCiudad.Text, ChkConsecutivo.Value, Me.txtCantidad.Text, TxtContiene.Text, Me.txtNumeroInicial.Text, Me.txtNumeroFinal.Text, Me.grdClasificacion.Text, cboCodigoEstado.Text)
             
             If (dataWS = "") Then

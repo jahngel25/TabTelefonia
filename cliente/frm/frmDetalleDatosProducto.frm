@@ -5463,13 +5463,26 @@ Private Sub cmdInsertar_Click(Index As Integer)
             End If
         End If
         Set varNumeros = Nothing
-        Dim classPeticionWS As claPeticionNetcracker
-        Dim resultadoConsult As Object
-        Set classPeticionWS = New claPeticionNetcracker
-        Set classPeticionWS.proConexion = Me.proConexion
-    
-        Set resultadoConsult = classPeticionWS.ParametrosPeticionWs("reserveNumbers", "", "", "TCRM", "Example_PMO-001", "Example_PMO-001", "1", "57", "Pruebas PMO Inspira CLARO", "Client 101800000", "CC", "101800000", "Address Client 101800000", numbersReserve, "", "", "", "", "", "", "", "P")
-    
+        Dim varResultados As ADODB.Recordset
+        Dim Script As String
+        Set varResultados = New ADODB.Recordset
+        Script = "SELECT vchMetododAtributo " & _
+                     "FROM AtributosSoapWebService " & _
+                     "WHERE vchMetodo = 'NetCracker'"
+                     
+        varResultados.Open Script, Me.proConexion
+        
+        While varResultados.EOF = False
+            If (varResultados("vchMetododAtributo") = "true") Then
+                Dim classPeticionWS As claPeticionNetcracker
+                Dim resultadoConsult As Object
+                Set classPeticionWS = New claPeticionNetcracker
+                Set classPeticionWS.proConexion = Me.proConexion
+                Set resultadoConsult = classPeticionWS.ParametrosPeticionWs("reserveNumbers", "", "", "TCRM", "Example_PMO-001", "Example_PMO-001", "1", "57", "Pruebas PMO Inspira CLARO", "Client 101800000", "CC", "101800000", "Address Client 101800000", numbersReserve, "", "", "", "", "", "", "", "P")
+     
+            End If
+            varResultados.MoveNext
+        Wend
     End If
     cmdModificarInsertados(2).Enabled = varModificarNumeracionPublica And (grdEdicionNumeroPublico.Rows - grdEdicionNumeroPublico.FixedRows > 0 Or grdNumeroPublico.Rows - grdNumeroPublico.FixedRows > 0)
     Screen.MousePointer = vbDefault
