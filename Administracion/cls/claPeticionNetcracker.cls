@@ -22,23 +22,6 @@ Public Function ParametrosPeticionWs(evento As String, city_name As String, esta
     Select Case evento
         Case "getNumbers"
             Set ParametrosPeticionWs = getNumbers(evento, city_name, estado_name, crm_in_use, request_id, transaction_id, area_code, country_code, customer_name, customer_id, customer_id_type, account_id, customer_location, number, city_code, consecutive_number, quantity_numbers, number_mask, initial_number, final_number, category, status)
-            
-            TipoLog = "Response"
-            CodigoLog = "300"
-            Set varCommand = New ADODB.Command
-            varCommand.CommandType = adCmdStoredProc
-            varCommand.ActiveConnection = Me.proConexion
-            varCommand.CommandText = "SP_InsertarLogNetCracker"
-            varCommand.Parameters.Append varCommand.CreateParameter("@vchTransaccionId", adVarChar, adParamInput, 50, transactionIdNet)
-            varCommand.Parameters.Append varCommand.CreateParameter("@vchEvento", adVarChar, adParamInput, 50, EventoLog)
-            varCommand.Parameters.Append varCommand.CreateParameter("@iIncidentId", adInteger, adParamInput, , IncidentId)
-            varCommand.Parameters.Append varCommand.CreateParameter("@chUseriD", adChar, adParamInput, 10, ClientId)
-            varCommand.Parameters.Append varCommand.CreateParameter("@vchNombreMaquina", adVarChar, adParamInput, 50, NombreMaquinaLog)
-            varCommand.Parameters.Append varCommand.CreateParameter("@vchTrama", adLongVarChar, adParamInput, 2147483647, TramaResponse)
-            varCommand.Parameters.Append varCommand.CreateParameter("@vchTipo", adVarChar, adParamInput, 50, TipoLog)
-            varCommand.Parameters.Append varCommand.CreateParameter("@vchCodigo", adVarChar, adParamInput, 8, CodigoLog)
-            varCommand.Execute
-            
         Case "reserveNumbers"
             Set ParametrosPeticionWs = reserveNumbers(evento, city_name, estado_name, crm_in_use, request_id, transaction_id, area_code, country_code, customer_name, customer_id, customer_id_type, account_id, customer_location, number, city_code, consecutive_number, quantity_numbers, number_mask, initial_number, final_number, category, status)
             
@@ -52,7 +35,7 @@ Public Function ParametrosPeticionWs(evento As String, city_name As String, esta
             varCommand.Parameters.Append varCommand.CreateParameter("@vchEvento", adVarChar, adParamInput, 50, EventoLog)
             varCommand.Parameters.Append varCommand.CreateParameter("@iIncidentId", adInteger, adParamInput, , IncidentId)
             varCommand.Parameters.Append varCommand.CreateParameter("@chUseriD", adChar, adParamInput, 10, ClientId)
-            varCommand.Parameters.Append varCommand.CreateParameter("@vchNombreMaquina", adVarChar, adParamInput, 50, NombreMaquinaLog)
+            varCommand.Parameters.Append varCommand.CreateParameter("@vchNombreMaquina", adVarChar, adParamInput, 50, UserName)
             varCommand.Parameters.Append varCommand.CreateParameter("@vchTrama", adLongVarChar, adParamInput, 2147483647, TramaResponse)
             varCommand.Parameters.Append varCommand.CreateParameter("@vchTipo", adVarChar, adParamInput, 50, TipoLog)
             varCommand.Parameters.Append varCommand.CreateParameter("@vchCodigo", adVarChar, adParamInput, 8, CodigoLog)
