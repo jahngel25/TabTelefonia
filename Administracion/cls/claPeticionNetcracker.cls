@@ -183,8 +183,8 @@ Public Function getNumbers(evento As String, city_name As String, estado_name As
             chUpdateBy = varCtNumeros("chUpdateBy")
             dtUpdateDate = varCtNumeros("dtUpdateDate")
         Else
-            chUpdateBy = fechaActual
-            dtUpdateDate = UserName
+            chUpdateBy = UserName
+            dtUpdateDate = fechaActual
         End If
         
         proNumeros.Add Me.proConexion, _
