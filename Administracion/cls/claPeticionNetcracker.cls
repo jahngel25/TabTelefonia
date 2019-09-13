@@ -45,7 +45,7 @@ Public Function ParametrosPeticionWs(evento As String, city_name As String, esta
        
 End Function
 
-Public Function getNumbers(evento As String, city_name As String, estado_name As String, crm_in_use As String, request_id As String, transaction_id As String, area_code As String, country_code As String, customer_name As String, customer_id As String, customer_id_type As String, account_id As String, customer_location As String, number As String, city_code As String, consecutive_number As String, quantity_numbers As String, number_mask As String, initial_number As String, final_number As String, category As String, status As String)
+Public Function getNumbers(evento As String, city_name As String, estado_name As String, crm_in_use As String, request_id As String, transaction_id As String, area_code As String, country_code As String, customer_name As String, customer_id As String, customer_id_type As String, account_id As String, customer_location As String, number As String, city_code As String, consecutive_number As String, quantity_numbers As String, number_mask As String, initial_number As String, final_number As String, category As String, status As String) As Object
 
     Dim ScriptCity As String
     Dim ScriptNombre As String
@@ -62,41 +62,55 @@ Public Function getNumbers(evento As String, city_name As String, estado_name As
     Dim resultWS As Object
     Dim classWS As claRequestWs
     Dim objetoPrueba As claRequestWs
-    Dim varContadorObject As Integer
     Dim consecutiveCheck As String
     
     'consulta para traer el codigo de la cuidad
-    Set varResultadosCity = New ADODB.Recordset
-    ScriptCity = "SELECT " & _
-                 "Ind.vchCodRegion, " & _
-                 "Ind.vchIndicativo, " & _
-                 "SUBSTRING (Ciu.vchCodigoCiudad , 1, 5) As vchCodigoCiudad " & _
-                 "FROM " & _
-                 "CT_IndicativoCiudadROC Ind " & _
-                 "INNER JOIN ct_CiudadDANE Ciu " & _
-                 "ON Ind.vchCityName = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Ciu.vchCiudad, 'Á', 'A'), 'É','E'), 'Í', 'I'), 'Ó', 'O'), 'Ú','U') " & _
-                 "WHERE Ind.vchCodRegion = " & Chr(39) & city_code & Chr(39) & " "
-    varResultadosCity.Open ScriptCity, Me.proConexion
+    If (city_code <> "") Then
+        Set varResultadosCity = New ADODB.Recordset
+        ScriptCity = "SELECT " & _
+                    "Ind.vchCodRegion, " & _
+                    "Ind.vchIndicativo, " & _
+                    "SUBSTRING (Ciu.vchCodigoCiudad , 1, 5) As vchCodigoCiudad " & _
+                    "FROM " & _
+                    "CT_IndicativoCiudadROC Ind " & _
+                    "INNER JOIN ct_CiudadDANE Ciu " & _
+                    "ON Ind.vchCityName = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Ciu.vchCiudad, 'Á', 'A'), 'É','E'), 'Í', 'I'), 'Ó', 'O'), 'Ú','U') " & _
+                    "WHERE Ind.vchCodRegion = " & Chr(39) & city_code & Chr(39) & " "
+        varResultadosCity.Open ScriptCity, Me.proConexion
     
-    'consulta para conparar la clasificacion de netcraker y onyx
-    If (category = "NUMEROS DORADOS") Then
-        strproClasificacionId = ""
-        proClasificacionDescripcion = ""
-        strClasificacionNet = ""
-    Else
-        Set varResultadosNumeros = New ADODB.Recordset
-        ScriptNumeros = "SELECT cla.iClasificacionId, " & _
-                    "cla.vchClasificacionNet, " & _
-                    "ct.vchClasificacion " & _
-                    "FROM ClasificacionNetCracker cla " & _
-                    "INNER JOIN CT_clasificacion ct " & _
-                    "ON cla.iClasificacionId = ct.iClasificacionId " & _
-                    "WHERE cla.iClasificacionId = " & category
-        varResultadosNumeros.Open ScriptNumeros, Me.proConexion
-        
-        strproClasificacionId = varResultadosNumeros("iClasificacionId")
-        proClasificacionDescripcion = varResultadosNumeros("vchClasificacion")
-        strClasificacionNet = varResultadosNumeros("vchClasificacionNet")
+        cityCode = varResultadosCity("vchCodigoCiudad")
+        areaCode = varResultadosCity("vchIndicativo")
+    End If
+    
+    If (category <> "") Then
+        'consulta para conparar la clasificacion de netcraker y onyx
+        If (category = "NUMEROS DORADOS") Then
+            strproClasificacionId = ""
+            proClasificacionDescripcion = ""
+            strClasificacionNet = "Normal"
+        Else
+            Set varResultadosNumeros = New ADODB.Recordset
+            ScriptNumeros = "SELECT cla.iClasificacionId, " & _
+                        "cla.vchClasificacionNet, " & _
+                        "ct.vchClasificacion " & _
+                        "FROM ClasificacionNetCracker cla " & _
+                        "INNER JOIN CT_clasificacion ct " & _
+                        "ON cla.iClasificacionId = ct.iClasificacionId " & _
+                        "WHERE cla.iClasificacionId = " & category
+            varResultadosNumeros.Open ScriptNumeros, Me.proConexion
+            
+            strproClasificacionId = varResultadosNumeros("iClasificacionId")
+            proClasificacionDescripcion = varResultadosNumeros("vchClasificacion")
+            strClasificacionNet = varResultadosNumeros("vchClasificacionNet")
+        End If
+    End If
+    
+    If (consecutive_number <> "") Then
+        If (consecutive_number = 1) Then
+            consecutiveCheck = "true"
+        Else
+            consecutiveCheck = ""
+        End If
     End If
     
     
@@ -106,20 +120,12 @@ Public Function getNumbers(evento As String, city_name As String, estado_name As
     varResultadosEstado.Open ScriptNombre, Me.proConexion
     
     'variables necesarias para el consumo del servicio web
-    cityCode = varResultadosCity("vchCodigoCiudad")
-    areaCode = varResultadosCity("vchIndicativo")
     strEstado = varResultadosEstado("vchEstadoNetCracker")
     
     Set classWS = New claRequestWs
     Set classWS.proConexion = Me.proConexion
     Set objetoPrueba = New claRequestWs
     Set classWS.coleccionPrueba = New Collection
-    
-    If (consecutive_number = 1) Then
-        consecutiveCheck = "true"
-    Else
-        consecutiveCheck = ""
-    End If
             
     transactionIdNet = GenGUID()
     objetoPrueba.crm_in_use = crm_in_use
@@ -150,6 +156,16 @@ Public Function getNumbers(evento As String, city_name As String, estado_name As
     classWS.coleccionPrueba.Add objetoPrueba.final_number, "final_number"
     objetoPrueba.category = strClasificacionNet
     classWS.coleccionPrueba.Add objetoPrueba.category, "category"
+    objetoPrueba.customer_name = customer_name
+    classWS.coleccionPrueba.Add objetoPrueba.customer_name, "customer_name"
+    objetoPrueba.customer_id = customer_id
+    classWS.coleccionPrueba.Add objetoPrueba.customer_id, "customer_id"
+    objetoPrueba.customer_id_type = customer_id_type
+    classWS.coleccionPrueba.Add objetoPrueba.customer_id_type, "customer_id_type"
+    objetoPrueba.account_id = account_id
+    classWS.coleccionPrueba.Add objetoPrueba.account_id, "account_id"
+    objetoPrueba.customer_location = customer_location
+    classWS.coleccionPrueba.Add objetoPrueba.customer_location, "customer_location"
     objetoPrueba.status = strEstado
     classWS.coleccionPrueba.Add objetoPrueba.status, "status"
     classWS.coleccionPrueba.Add objetoPrueba
@@ -159,55 +175,9 @@ Public Function getNumbers(evento As String, city_name As String, estado_name As
         Screen.MousePointer = 0
         Exit Function
     End If
-    
-    Screen.MousePointer = 11
-    Set proNumeros = New colNumero
-
-    For varContadorObject = 1 To resultWS.Count
-                        
-        Dim getNumero As String
-        Dim fechaActual As String
-        Dim varCtNumeros As ADODB.Recordset
-        Dim ScriptCtNumeros As String
-        Dim chUpdateBy As String
-        Dim dtUpdateDate As String
-                            
-        fechaActual = Now
-        getNumero = resultWS.Item("item" & varContadorObject).Item(1).Item("number")
         
-        Set varCtNumeros = New ADODB.Recordset
-        ScriptCtNumeros = "SELECT chUpdateBy, dtUpdateDate FROM CT_Numeros WHERE vchNumero = " & Chr(39) & Mid(getNumero, 4) & Chr(39)
-        varCtNumeros.Open ScriptCtNumeros, Me.proConexion
-        
-        If Not varCtNumeros.EOF Then
-            chUpdateBy = varCtNumeros("chUpdateBy")
-            dtUpdateDate = varCtNumeros("dtUpdateDate")
-        Else
-            chUpdateBy = UserName
-            dtUpdateDate = fechaActual
-        End If
-        
-        proNumeros.Add Me.proConexion, _
-                        1, _
-                        dtUpdateDate, _
-                        chUpdateBy, _
-                        strproClasificacionId, _
-                        proClasificacionDescripcion, _
-                        estado_name, _
-                        status, _
-                        Mid(getNumero, 4), _
-                        city_name, _
-                        city_code, _
-                        "", _
-                        "", _
-                        "", _
-                        "", _
-                        ""
-    Next varContadorObject
-    
-    Set getNumbers = proNumeros
-        
-      
+    Set getNumbers = resultWS
+              
 End Function
 
 Public Function reserveNumbers(evento As String, city_name As String, estado_name As String, crm_in_use As String, request_id As String, transaction_id As String, area_code As String, country_code As String, customer_name As String, customer_id As String, customer_id_type As String, account_id As String, customer_location As String, number As String, city_code As String, consecutive_number As String, quantity_numbers As String, number_mask As String, initial_number As String, final_number As String, category As String, status As String)

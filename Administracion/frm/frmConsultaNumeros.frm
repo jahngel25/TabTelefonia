@@ -628,22 +628,91 @@ Private Sub cmdBuscar_Click()
     
     While varResultados.EOF = False
         If (varResultados("vchMetododAtributo") = "true") Then
-                    
+            Dim varContadorObject As Integer
+            Dim varResultadosNumeros As ADODB.Recordset
             Dim classPeticionWS As claPeticionNetcracker
+            Dim ScriptNumeros As String
+            Dim strproClasificacionId As String
+            Dim proClasificacionDescripcion As String
+            Dim strClasificacionNet As String
             Set classPeticionWS = New claPeticionNetcracker
             Set classPeticionWS.proConexion = Me.proConexion
             Screen.MousePointer = 11
-            Set Me.proNumeros = Nothing
-            Set Me.proNumeros = New colNumero
-            Set Me.proNumeros = classPeticionWS.ParametrosPeticionWs("getNumbers", cboNombreCiudad.Text, cboNombreEstado.Text, "TCRM", "Example_PMO-001", "Example_PMO-001", "1", "57", "", "", "", "", "", "", cboCodigoCiudad.Text, ChkConsecutivo.Value, Me.txtCantidad.Text, TxtContiene.Text, Me.txtNumeroInicial.Text, Me.txtNumeroFinal.Text, Me.grdClasificacion.Text, cboCodigoEstado.Text)
+            Dim resultWS As Object
+            Set resultWS = classPeticionWS.ParametrosPeticionWs("getNumbers", cboNombreCiudad.Text, cboNombreEstado.Text, "TCRM", "Example_PMO-001", "Example_PMO-001", "1", "57", "", "", "", "", "", "", cboCodigoCiudad.Text, ChkConsecutivo.Value, Me.txtCantidad.Text, TxtContiene.Text, Me.txtNumeroInicial.Text, Me.txtNumeroFinal.Text, Me.grdClasificacion.Text, cboCodigoEstado.Text)
             
+                       
             If (dataWS = "") Then
                 Screen.MousePointer = 0
                 Exit Sub
             End If
             
+            Screen.MousePointer = 11
+            Set Me.proNumeros = New colNumero
+            
+            If (Me.grdClasificacion.Text = "NUMEROS DORADOS") Then
+                strproClasificacionId = ""
+                proClasificacionDescripcion = ""
+                strClasificacionNet = "Normal"
+            Else
+                Set varResultadosNumeros = New ADODB.Recordset
+                ScriptNumeros = "SELECT cla.iClasificacionId, " & _
+                            "cla.vchClasificacionNet, " & _
+                            "ct.vchClasificacion " & _
+                            "FROM ClasificacionNetCracker cla " & _
+                            "INNER JOIN CT_clasificacion ct " & _
+                            "ON cla.iClasificacionId = ct.iClasificacionId " & _
+                            "WHERE cla.iClasificacionId = " & Me.grdClasificacion.Text
+                varResultadosNumeros.Open ScriptNumeros, Me.proConexion
+                
+                strproClasificacionId = varResultadosNumeros("iClasificacionId")
+                proClasificacionDescripcion = varResultadosNumeros("vchClasificacion")
+                strClasificacionNet = varResultadosNumeros("vchClasificacionNet")
+            End If
+        
+            For varContadorObject = 1 To resultWS.Count
+                Dim getNumero As String
+                Dim fechaActual As String
+                Dim varCtNumeros As ADODB.Recordset
+                Dim ScriptCtNumeros As String
+                Dim chUpdateBy As String
+                Dim dtUpdateDate As String
+                                    
+                fechaActual = Now
+                getNumero = resultWS.Item("item" & varContadorObject).Item(1).Item("number")
+                
+                Set varCtNumeros = New ADODB.Recordset
+                ScriptCtNumeros = "SELECT chUpdateBy, dtUpdateDate FROM CT_Numeros WHERE vchNumero = " & Chr(39) & Mid(getNumero, 4) & Chr(39)
+                varCtNumeros.Open ScriptCtNumeros, Me.proConexion
+                
+                If Not varCtNumeros.EOF Then
+                    chUpdateBy = varCtNumeros("chUpdateBy")
+                    dtUpdateDate = varCtNumeros("dtUpdateDate")
+                Else
+                    chUpdateBy = UserName
+                    dtUpdateDate = fechaActual
+                End If
+                
+                Me.proNumeros.Add Me.proConexion, _
+                                1, _
+                                dtUpdateDate, _
+                                chUpdateBy, _
+                                strproClasificacionId, _
+                                proClasificacionDescripcion, _
+                                cboNombreEstado.Text, _
+                                cboCodigoEstado.Text, _
+                                Mid(getNumero, 4), _
+                                cboNombreCiudad.Text, _
+                                cboCodigoCiudad.Text, _
+                                "", _
+                                "", _
+                                "", _
+                                "", _
+                                ""
+             Next varContadorObject
+              
             Call SubFPintarGridNumeros
-                                            
+            
         Else
         
             Screen.MousePointer = 11

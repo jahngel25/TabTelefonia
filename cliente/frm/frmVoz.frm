@@ -1408,7 +1408,7 @@ Begin VB.Form frmVoz
          Caption         =   "Los tipos de línea corresponden al tipo de conexión física entre la oficina y la red. Estos pueden ser E1, RDSI, Básicas etc."
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Arial Narrow"
-            Size            =   8.24
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1655,7 +1655,7 @@ Begin VB.Form frmVoz
          BackColor       =   13160660
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Arial Narrow"
-            Size            =   8.24
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1692,7 +1692,7 @@ Begin VB.Form frmVoz
          BackColor       =   13160660
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Arial Narrow"
-            Size            =   8.24
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1747,7 +1747,7 @@ Begin VB.Form frmVoz
          BackColor       =   13160660
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Arial Narrow"
-            Size            =   8.24
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1783,7 +1783,7 @@ Begin VB.Form frmVoz
          BackColor       =   13160660
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Arial Narrow"
-            Size            =   8.24
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1848,6 +1848,10 @@ Public proiClienteId As Long '1.0.100
 Public proOnyx As EDCVoz.claONYX
 
 Public proDatosProducto As claDatosProducto
+
+Public proParametrosProducto As colParametroProducto
+
+Public proDatosProductoNumero As colDatosProductoNumero
 
 Public proServiciosSuplementarios As EDCAdminVoz.colServiciosSup
 
@@ -2192,6 +2196,7 @@ Private Sub Form_Load()
                 Exit Sub
             End If
             
+            
             'Consultar la información de la numeración pública
             If Me.proDatosProducto.MetConsultarDatosProductoNumero Then
                 Call SubFPintarGridNumeroPublico
@@ -2409,24 +2414,83 @@ End Sub
 Private Sub SubFPintarGridNumeroPublico()
     Dim varContador As Integer
     Dim varDescripcionClasificaciones As String
+    Dim varResultados As ADODB.Recordset
+    Dim Script As String
     On Error GoTo ErrManager
     
     Me.grdNumeracionPublica.Rows = 1
     
-    For varContador = 1 To Me.proDatosProducto.proDatosProductoNumero.Count
-        varDescripcionClasificaciones = ""
-        If Not IsNull(Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proClasificacionDescripcion) Then
-            'varDescripcionClasificaciones =
-        End If
-        Me.grdNumeracionPublica.AddItem Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proDatosProductoId & vbTab & _
+    'Consulta para la validacion de que flujo seguir
+    Set varResultados = New ADODB.Recordset
+    Script = "SELECT vchMetododAtributo " & _
+             "FROM AtributosSoapWebService " & _
+             "WHERE vchMetodo = 'NetCracker'"
+    varResultados.Open Script, Me.proConexion
+    
+    While varResultados.EOF = False
+        If (varResultados("vchMetododAtributo") = "true") Then
+            Dim varContadorObject As Integer
+            Dim resultWS As Object
+            Dim varResultadosClient As ADODB.Recordset
+            Dim ScriptClient As String
+            Set varResultadosClient = New ADODB.Recordset
+            ScriptClient = "SELECT * FROM COMPANY where iCompanyId = " & ClientId
+            varResultadosClient.Open ScriptClient, Me.proConexion
+            While varResultadosClient.EOF = False
+                Dim classPeticionWS As claPeticionNetcracker
+                Set classPeticionWS = New claPeticionNetcracker
+                Set classPeticionWS.proConexion = Me.proConexion
+                Set resultWS = classPeticionWS.ParametrosPeticionWs("getNumbers", "", "", "TCRM", "Example_PMO-001", "Example_PMO-001", "1", "57", varResultadosClient("vchCompanyName"), varResultadosClient("icompanyid"), "CC", varResultadosClient("icompanyid"), varResultadosClient("vchAddress1"), "", varResultadosClient("vchRegionCode"), "", "", "", "", "", "", "P")
+                
+                varResultadosClient.MoveNext
+            Wend
+                
+            Set Me.proDatosProductoNumero = Nothing
+            Set Me.proDatosProductoNumero = New colDatosProductoNumero
+            Set Me.proDatosProductoNumero.proConexion = Me.proConexion
+            
+            Dim varDatosProductoNumero As claDatosProductoNumero
+            Set varDatosProductoNumero = New claDatosProductoNumero
+            
+            For varContadorObject = 1 To resultWS.Count
+                                            
+                Me.proDatosProductoNumero.Add Me.proConexion, _
+                            varDatosProductoNumero.proFechaAsignacion, _
+                            varDatosProductoNumero.proNumero, _
+                            varDatosProductoNumero.proRegionName, _
+                            varDatosProductoNumero.proRegionCode, _
+                            varDatosProductoNumero.proDatosProductoId, _
+                            varDatosProductoNumero.proClasificacionDescripcion, _
+                            varDatosProductoNumero.proTipoLinea, _
+                            varDatosProductoNumero.proPublicar
+                            
+            Next varContadorObject
+            
+            Me.grdNumeracionPublica.AddItem Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proDatosProductoId & vbTab & _
                                             Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proRegionCode & vbTab & _
                                             Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proRegionName & vbTab & _
                                             Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proNumero & vbTab & _
                                             Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proClasificacionDescripcion & vbTab & _
                                             Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proFechaAsignacion
-                                    
-        'Pierre Torres Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proClasificacionDescripcion
-    Next varContador
+        
+        Else
+            For varContador = 1 To Me.proDatosProducto.proDatosProductoNumero.Count
+                varDescripcionClasificaciones = ""
+                If Not IsNull(Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proClasificacionDescripcion) Then
+                    'varDescripcionClasificaciones =
+                End If
+                Me.grdNumeracionPublica.AddItem Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proDatosProductoId & vbTab & _
+                                                    Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proRegionCode & vbTab & _
+                                                    Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proRegionName & vbTab & _
+                                                    Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proNumero & vbTab & _
+                                                    Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proClasificacionDescripcion & vbTab & _
+                                                    Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proFechaAsignacion
+                                            
+                'Pierre Torres Me.proDatosProducto.proDatosProductoNumero.Item(varContador).proClasificacionDescripcion
+            Next varContador
+        End If
+        varResultados.MoveNext
+    Wend
     
     Me.grdNumeracionPublica.Row = 0
     

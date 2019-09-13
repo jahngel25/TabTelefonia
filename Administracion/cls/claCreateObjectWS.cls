@@ -48,7 +48,6 @@ Public Function crearJsonGetNumbers(strSoap, strSOAPAction, strWsdl, xmlResponse
     
     If (dataWS = validacion) Then
          dataWS = ""
-         MsgBox "No se encuentra numeros con los filtros seleccionados", , App.Title
     Else
         dataWS = Left(dataWS, Len(dataWS) - 14) & "}]}"
     End If

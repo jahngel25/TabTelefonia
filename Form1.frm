@@ -13,7 +13,7 @@ Begin VB.Form Form1
       Height          =   285
       Left            =   1560
       TabIndex        =   18
-      Text            =   "189495"
+      Text            =   "193212"
       Top             =   1560
       Width           =   2895
    End
@@ -38,7 +38,7 @@ Begin VB.Form Form1
       Height          =   285
       Left            =   1560
       TabIndex        =   14
-      Text            =   "CRM12830360"
+      Text            =   "CRM1314989"
       Top             =   0
       Width           =   2895
    End
