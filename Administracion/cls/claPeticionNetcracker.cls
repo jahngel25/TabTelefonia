@@ -150,6 +150,16 @@ Public Function getNumbers(evento As String, city_name As String, estado_name As
     classWS.coleccionPrueba.Add objetoPrueba.final_number, "final_number"
     objetoPrueba.category = strClasificacionNet
     classWS.coleccionPrueba.Add objetoPrueba.category, "category"
+    objetoPrueba.customer_name = customer_name
+    classWS.coleccionPrueba.Add objetoPrueba.customer_name, "customer_name"
+    objetoPrueba.customer_id = customer_id
+    classWS.coleccionPrueba.Add objetoPrueba.customer_id, "customer_id"
+    objetoPrueba.customer_id_type = customer_id_type
+    classWS.coleccionPrueba.Add objetoPrueba.customer_id_type, "customer_id_type"
+    objetoPrueba.account_id = account_id
+    classWS.coleccionPrueba.Add objetoPrueba.account_id, "account_id"
+    objetoPrueba.customer_location = customer_location
+    classWS.coleccionPrueba.Add objetoPrueba.customer_location, "customer_location"
     objetoPrueba.status = strEstado
     classWS.coleccionPrueba.Add objetoPrueba.status, "status"
     classWS.coleccionPrueba.Add objetoPrueba
