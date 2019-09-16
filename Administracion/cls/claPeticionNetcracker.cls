@@ -82,7 +82,7 @@ Public Function getNumbers(evento As String, city_name As String, estado_name As
     If (category = "NUMEROS DORADOS") Then
         strproClasificacionId = ""
         proClasificacionDescripcion = ""
-        strClasificacionNet = ""
+        strClasificacionNet = "Normal"
     Else
         Set varResultadosNumeros = New ADODB.Recordset
         ScriptNumeros = "SELECT cla.iClasificacionId, " & _
@@ -126,7 +126,7 @@ Public Function getNumbers(evento As String, city_name As String, estado_name As
     classWS.coleccionPrueba.Add objetoPrueba.crm_in_use, "crm_in_use"
     objetoPrueba.request_id = transactionIdNet
     classWS.coleccionPrueba.Add objetoPrueba.request_id, "request_id"
-    objetoPrueba.transaction_id = transactionIdNet
+    objetoPrueba.transaction_id = GenGUID()
     classWS.coleccionPrueba.Add objetoPrueba.transaction_id, "transaction_id"
     objetoPrueba.city_code = cityCode
     classWS.coleccionPrueba.Add objetoPrueba.city_code, "city_code"
@@ -234,7 +234,7 @@ Public Function reserveNumbers(evento As String, city_name As String, estado_nam
     classWS.coleccionPrueba.Add objetoPrueba.crm_in_use, "crm_in_use"
     objetoPrueba.request_id = transactionIdNet
     classWS.coleccionPrueba.Add objetoPrueba.request_id, "request_id"
-    objetoPrueba.transaction_id = transactionIdNet
+    objetoPrueba.transaction_id = GenGUID()
     classWS.coleccionPrueba.Add objetoPrueba.transaction_id, "transaction_id"
     objetoPrueba.country_code = country_code
     classWS.coleccionPrueba.Add objetoPrueba.country_code, "country_code"
