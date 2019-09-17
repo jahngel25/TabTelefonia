@@ -229,6 +229,10 @@ Public Function reserveNumbers(evento As String, city_name As String, estado_nam
     Dim strEstado As String
     Dim ScriptNombre As String
     Dim varResultadosEstado As ADODB.Recordset
+    Dim ScriptCity As String
+    Dim varResultadosCity As ADODB.Recordset
+    Dim cityCode As String
+    Dim areaCode As String
     
     Set classWS = New claRequestWs
     Set classWS.proConexion = Me.proConexion
@@ -239,6 +243,22 @@ Public Function reserveNumbers(evento As String, city_name As String, estado_nam
     ScriptNombre = "SELECT vchEstadoNetCracker FROM EstadoNetCracker WHERE vchEstadoOnyx = " & Chr(39) & status & Chr(39)
     varResultadosEstado.Open ScriptNombre, Me.proConexion
     strEstado = varResultadosEstado("vchEstadoNetCracker")
+    
+    'consulta para traer el codigo de la cuidad
+    Set varResultadosCity = New ADODB.Recordset
+    ScriptCity = "SELECT " & _
+                 "Ind.vchCodRegion, " & _
+                 "Ind.vchIndicativo, " & _
+                 "SUBSTRING (Ciu.vchCodigoCiudad , 1, 5) As vchCodigoCiudad " & _
+                 "FROM " & _
+                 "CT_IndicativoCiudadROC Ind " & _
+                 "INNER JOIN ct_CiudadDANE Ciu " & _
+                 "ON Ind.vchCityName = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Ciu.vchCiudad, 'Á', 'A'), 'É','E'), 'Í', 'I'), 'Ó', 'O'), 'Ú','U') " & _
+                 "WHERE Ind.vchCodRegion = " & Chr(39) & city_code & Chr(39) & " "
+    varResultadosCity.Open ScriptCity, Me.proConexion
+    
+    cityCode = varResultadosCity("vchCodigoCiudad")
+    areaCode = varResultadosCity("vchIndicativo")
         
     objetoPrueba.crm_in_use = crm_in_use
     classWS.coleccionPrueba.Add objetoPrueba.crm_in_use, "crm_in_use"
@@ -248,7 +268,7 @@ Public Function reserveNumbers(evento As String, city_name As String, estado_nam
     classWS.coleccionPrueba.Add objetoPrueba.transaction_id, "transaction_id"
     objetoPrueba.country_code = country_code
     classWS.coleccionPrueba.Add objetoPrueba.country_code, "country_code"
-    objetoPrueba.area_code = area_code
+    objetoPrueba.area_code = areaCode
     classWS.coleccionPrueba.Add objetoPrueba.area_code, "area_code"
     objetoPrueba.status = strEstado
     classWS.coleccionPrueba.Add objetoPrueba.status, "status"

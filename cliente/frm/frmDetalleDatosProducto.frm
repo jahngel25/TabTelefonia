@@ -1042,22 +1042,22 @@ Begin VB.Form frmDetalleDatosProducto
       TabCaption(0)   =   "TIPOS DE LINEA"
       TabPicture(0)   =   "frmDetalleDatosProducto.frx":0D22
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "lblSeccion(0)"
-      Tab(0).Control(1)=   "fraFondoModificacion"
-      Tab(0).Control(2)=   "fraFondoProductos(0)"
-      Tab(0).Control(3)=   "pnlFuerte"
-      Tab(0).Control(4)=   "pnlTenue"
-      Tab(0).Control(5)=   "SSPanel2(0)"
+      Tab(0).Control(0)=   "SSPanel2(0)"
+      Tab(0).Control(1)=   "pnlTenue"
+      Tab(0).Control(2)=   "pnlFuerte"
+      Tab(0).Control(3)=   "fraFondoProductos(0)"
+      Tab(0).Control(4)=   "fraFondoModificacion"
+      Tab(0).Control(5)=   "lblSeccion(0)"
       Tab(0).ControlCount=   6
       TabCaption(1)   =   "NUMERACION PRIVADA"
       TabPicture(1)   =   "frmDetalleDatosProducto.frx":0D3E
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "lblSeccion(1)"
-      Tab(1).Control(1)=   "fraFondoProductos(1)"
-      Tab(1).Control(2)=   "Frame2(0)"
-      Tab(1).Control(3)=   "SSPanel2(1)"
-      Tab(1).Control(4)=   "SSPanel4"
-      Tab(1).Control(5)=   "cmdRefrescarPlanesNumeracion"
+      Tab(1).Control(0)=   "cmdRefrescarPlanesNumeracion"
+      Tab(1).Control(1)=   "SSPanel4"
+      Tab(1).Control(2)=   "SSPanel2(1)"
+      Tab(1).Control(3)=   "Frame2(0)"
+      Tab(1).Control(4)=   "fraFondoProductos(1)"
+      Tab(1).Control(5)=   "lblSeccion(1)"
       Tab(1).ControlCount=   6
       TabCaption(2)   =   "NUMERACION PUBLICA"
       TabPicture(2)   =   "frmDetalleDatosProducto.frx":0D5A
@@ -5482,9 +5482,11 @@ Private Sub cmdInsertar_Click(Index As Integer)
                 While varResultadosClient.EOF = False
                     Dim classPeticionWS As claPeticionNetcracker
                     Dim resultadoConsult As Object
+                    Dim ciudadCode As String
+                    ciudadCode = varNovedadNumero.proRegionCode
                     Set classPeticionWS = New claPeticionNetcracker
                     Set classPeticionWS.proConexion = Me.proConexion
-                    Set resultadoConsult = classPeticionWS.ParametrosPeticionWs("reserveNumbers", "", "", "TCRM", "Example_PMO-001", "Example_PMO-001", "1", "57", varResultadosClient("vchCompanyName"), varResultadosClient("icompanyid"), "CC", varResultadosClient("icompanyid"), varResultadosClient("vchAddress1"), numbersReserve, "", "", "", "", "", "", "", "P")
+                    Set resultadoConsult = classPeticionWS.ParametrosPeticionWs("reserveNumbers", "", "", "TCRM", "Example_PMO-001", "Example_PMO-001", "1", "57", varResultadosClient("vchCompanyName"), varResultadosClient("icompanyid"), "CC", varResultadosClient("icompanyid"), varResultadosClient("vchAddress1"), numbersReserve, ciudadCode, "", "", "", "", "", "", "P")
                 varResultadosClient.MoveNext
                 Wend
             End If
@@ -6152,7 +6154,7 @@ Private Sub Form_Load()
             Me.chkEnvioCorpLD.Value = 0
         End If
         Me.TxtIdVenta.Text = Trim(Me.proDatosProducto.proiVentaid)
-        Me.txtEnlace.Text = Trim(Me.proDatosProducto.proCodigoEnlace)
+        Me.TxtEnlace.Text = Trim(Me.proDatosProducto.proCodigoEnlace)
         Call SubFInicializarBotones
         
         'Consultar ciudad de instalación
@@ -8563,7 +8565,7 @@ End Sub
 Private Sub TxtEnlace_LostFocus()
 On Error GoTo ErrManager
     Me.TxtIdVenta.Text = ""
-    Me.TxtIdVenta.Text = Trim(Me.proDatosProducto.MetDevolverVenta(Trim(txtEnlace.Text)))
+    Me.TxtIdVenta.Text = Trim(Me.proDatosProducto.MetDevolverVenta(Trim(TxtEnlace.Text)))
 Exit Sub
 ErrManager:
     SubGMuestraError
@@ -8648,8 +8650,8 @@ End Sub
 
 Private Sub TxtIdVenta_LostFocus()
 On Error GoTo ErrManager
-      Me.txtEnlace.Text = ""
-      Me.txtEnlace.Text = Trim(Me.proDatosProducto.MetDevolverEnlace(Trim(TxtIdVenta.Text)))
+      Me.TxtEnlace.Text = ""
+      Me.TxtEnlace.Text = Trim(Me.proDatosProducto.MetDevolverEnlace(Trim(TxtIdVenta.Text)))
  Exit Sub
 ErrManager:
     SubGMuestraError
