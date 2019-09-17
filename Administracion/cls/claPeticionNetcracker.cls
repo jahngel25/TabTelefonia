@@ -259,6 +259,17 @@ Public Function reserveNumbers(evento As String, city_name As String, estado_nam
     
     cityCode = varResultadosCity("vchCodigoCiudad")
     areaCode = varResultadosCity("vchIndicativo")
+    
+    Dim varResultados As ADODB.Recordset
+    Dim Script As String
+    Set varResultados = New ADODB.Recordset
+    Script = "SELECT TOP 1 vchTransaccionId FROM CT_LogNetCracker WHERE iIncidentId = " & Chr(39) & IncidentId & Chr(39) & " "
+    varResultados.Open Script, Me.proConexion
+    
+    While varResultados.EOF = False
+        transactionIdNet = varResultados("vchTransaccionId")
+        varResultados.MoveNext
+    Wend
         
     objetoPrueba.crm_in_use = crm_in_use
     classWS.coleccionPrueba.Add objetoPrueba.crm_in_use, "crm_in_use"
