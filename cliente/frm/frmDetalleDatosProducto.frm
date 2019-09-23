@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#1.0#0"; "Threed32.OCX"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmDetalleDatosProducto 
    BorderStyle     =   1  'Fixed Single
@@ -1028,6 +1028,7 @@ Begin VB.Form frmDetalleDatosProducto
       _ExtentY        =   16907
       _Version        =   393216
       Style           =   1
+      Tab             =   2
       TabHeight       =   520
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Arial"
@@ -1040,38 +1041,37 @@ Begin VB.Form frmDetalleDatosProducto
       EndProperty
       TabCaption(0)   =   "TIPOS DE LINEA"
       TabPicture(0)   =   "frmDetalleDatosProducto.frx":0D22
-      Tab(0).ControlEnabled=   -1  'True
-      Tab(0).Control(0)=   "lblSeccion(0)"
-      Tab(0).Control(0).Enabled=   0   'False
-      Tab(0).Control(1)=   "fraFondoModificacion"
-      Tab(0).Control(1).Enabled=   0   'False
-      Tab(0).Control(2)=   "fraFondoProductos(0)"
-      Tab(0).Control(2).Enabled=   0   'False
-      Tab(0).Control(3)=   "pnlFuerte"
-      Tab(0).Control(3).Enabled=   0   'False
-      Tab(0).Control(4)=   "pnlTenue"
-      Tab(0).Control(4).Enabled=   0   'False
-      Tab(0).Control(5)=   "SSPanel2(0)"
-      Tab(0).Control(5).Enabled=   0   'False
+      Tab(0).ControlEnabled=   0   'False
+      Tab(0).Control(0)=   "SSPanel2(0)"
+      Tab(0).Control(1)=   "pnlTenue"
+      Tab(0).Control(2)=   "pnlFuerte"
+      Tab(0).Control(3)=   "fraFondoProductos(0)"
+      Tab(0).Control(4)=   "fraFondoModificacion"
+      Tab(0).Control(5)=   "lblSeccion(0)"
       Tab(0).ControlCount=   6
       TabCaption(1)   =   "NUMERACION PRIVADA"
       TabPicture(1)   =   "frmDetalleDatosProducto.frx":0D3E
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "lblSeccion(1)"
-      Tab(1).Control(1)=   "fraFondoProductos(1)"
-      Tab(1).Control(2)=   "Frame2(0)"
-      Tab(1).Control(3)=   "SSPanel2(1)"
-      Tab(1).Control(4)=   "SSPanel4"
-      Tab(1).Control(5)=   "cmdRefrescarPlanesNumeracion"
+      Tab(1).Control(0)=   "cmdRefrescarPlanesNumeracion"
+      Tab(1).Control(1)=   "SSPanel4"
+      Tab(1).Control(2)=   "SSPanel2(1)"
+      Tab(1).Control(3)=   "Frame2(0)"
+      Tab(1).Control(4)=   "fraFondoProductos(1)"
+      Tab(1).Control(5)=   "lblSeccion(1)"
       Tab(1).ControlCount=   6
       TabCaption(2)   =   "NUMERACION PUBLICA"
       TabPicture(2)   =   "frmDetalleDatosProducto.frx":0D5A
-      Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "SSPanel2(2)"
-      Tab(2).Control(1)=   "Frame2(1)"
+      Tab(2).ControlEnabled=   -1  'True
+      Tab(2).Control(0)=   "lblSeccion(2)"
+      Tab(2).Control(0).Enabled=   0   'False
+      Tab(2).Control(1)=   "fraFondoProductos(2)"
+      Tab(2).Control(1).Enabled=   0   'False
       Tab(2).Control(2)=   "SSPanel5"
-      Tab(2).Control(3)=   "fraFondoProductos(2)"
-      Tab(2).Control(4)=   "lblSeccion(2)"
+      Tab(2).Control(2).Enabled=   0   'False
+      Tab(2).Control(3)=   "Frame2(1)"
+      Tab(2).Control(3).Enabled=   0   'False
+      Tab(2).Control(4)=   "SSPanel2(2)"
+      Tab(2).Control(4).Enabled=   0   'False
       Tab(2).ControlCount=   5
       Begin VB.ComboBox Combo1 
          Height          =   315
@@ -1094,7 +1094,7 @@ Begin VB.Form frmDetalleDatosProducto
       Begin Threed.SSPanel SSPanel2 
          Height          =   435
          Index           =   2
-         Left            =   -69060
+         Left            =   5940
          TabIndex        =   187
          Top             =   4440
          Width           =   3975
@@ -1156,7 +1156,7 @@ Begin VB.Form frmDetalleDatosProducto
          BackColor       =   &H00C09258&
          Height          =   5145
          Index           =   1
-         Left            =   -74940
+         Left            =   60
          TabIndex        =   165
          Top             =   4350
          Width           =   9405
@@ -1481,7 +1481,7 @@ Begin VB.Form frmDetalleDatosProducto
       End
       Begin Threed.SSPanel SSPanel5 
          Height          =   8805
-         Left            =   -65280
+         Left            =   9720
          TabIndex        =   162
          Top             =   690
          Width           =   5055
@@ -1593,7 +1593,7 @@ Begin VB.Form frmDetalleDatosProducto
          BackColor       =   &H00808080&
          Height          =   3945
          Index           =   2
-         Left            =   -74910
+         Left            =   90
          TabIndex        =   145
          Top             =   360
          Width           =   14835
@@ -2696,7 +2696,7 @@ Begin VB.Form frmDetalleDatosProducto
       Begin Threed.SSPanel SSPanel2 
          Height          =   435
          Index           =   0
-         Left            =   10080
+         Left            =   -64920
          TabIndex        =   96
          Top             =   4440
          Width           =   4215
@@ -2756,7 +2756,7 @@ Begin VB.Form frmDetalleDatosProducto
       End
       Begin Threed.SSPanel pnlTenue 
          Height          =   225
-         Left            =   6720
+         Left            =   -68280
          TabIndex        =   58
          Top             =   9210
          Visible         =   0   'False
@@ -2780,7 +2780,7 @@ Begin VB.Form frmDetalleDatosProducto
       End
       Begin Threed.SSPanel pnlFuerte 
          Height          =   225
-         Left            =   6150
+         Left            =   -68850
          TabIndex        =   57
          Top             =   9210
          Visible         =   0   'False
@@ -2806,7 +2806,7 @@ Begin VB.Form frmDetalleDatosProducto
          BackColor       =   &H00808080&
          Height          =   3945
          Index           =   0
-         Left            =   30
+         Left            =   -74970
          TabIndex        =   50
          Top             =   360
          Width           =   14835
@@ -3276,7 +3276,7 @@ Begin VB.Form frmDetalleDatosProducto
       Begin VB.Frame fraFondoModificacion 
          BackColor       =   &H00C09258&
          Height          =   5235
-         Left            =   60
+         Left            =   -74940
          TabIndex        =   52
          Top             =   4320
          Width           =   14775
@@ -3656,7 +3656,7 @@ Begin VB.Form frmDetalleDatosProducto
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Index           =   2
-         Left            =   -71640
+         Left            =   3360
          TabIndex        =   56
          Top             =   30
          Width           =   1875
@@ -3700,7 +3700,7 @@ Begin VB.Form frmDetalleDatosProducto
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Index           =   0
-         Left            =   30
+         Left            =   -74970
          TabIndex        =   54
          Top             =   30
          Width           =   1365
@@ -5364,6 +5364,8 @@ Private Sub cmdInsertar_Click(Index As Integer)
                 varNumerosPorAsignar = varNumeros.proSeleccionados
                 varIndiceTipoLinea = 1
                 Dim varAsociaNovedad As String
+                Dim numbersReserve As String
+                numbersReserve = ""
                 For varContador = 1 To varNumeros.Count
                     If varNumeros.Item(varContador).proSeleccionado = "S" Then
                         If varNumeros.Item(varContador).proEstadoNumero <> "L" _
@@ -5440,6 +5442,11 @@ Private Sub cmdInsertar_Click(Index As Integer)
                                 'Exit Sub
                             End If
                         End If
+                        If (numbersReserve <> "") Then
+                            numbersReserve = numbersReserve & "," & varNumeros.Item(varContador).proNumero
+                        Else
+                            numbersReserve = varNumeros.Item(varContador).proNumero
+                        End If
                     End If
                 Next varContador
                 
@@ -5456,9 +5463,39 @@ Private Sub cmdInsertar_Click(Index As Integer)
             End If
         End If
         Set varNumeros = Nothing
+        Dim varResultados As ADODB.Recordset
+        Dim Script As String
+        Set varResultados = New ADODB.Recordset
+        Script = "SELECT vchMetododAtributo " & _
+                     "FROM AtributosSoapWebService " & _
+                     "WHERE vchMetodo = 'NetCracker'"
+                     
+        varResultados.Open Script, Me.proConexion
+        
+        While varResultados.EOF = False
+            If (varResultados("vchMetododAtributo") = "true") Then
+                Dim varResultadosClient As ADODB.Recordset
+                Dim ScriptClient As String
+                Set varResultadosClient = New ADODB.Recordset
+                ScriptClient = "SELECT * FROM COMPANY where iCompanyId = " & ClientId
+                varResultadosClient.Open ScriptClient, Me.proConexion
+                While varResultadosClient.EOF = False
+                    Dim classPeticionWS As claPeticionNetcracker
+                    Dim resultadoConsult As Object
+                    Dim ciudadCode As String
+                    ciudadCode = varNovedadNumero.proRegionCode
+                    Set classPeticionWS = New claPeticionNetcracker
+                    Set classPeticionWS.proConexion = Me.proConexion
+                    Set resultadoConsult = classPeticionWS.ParametrosPeticionWs("reserveNumbers", "", "", "TCRM", "Example_PMO-001", "Example_PMO-001", "1", "57", varResultadosClient("vchCompanyName"), varResultadosClient("icompanyid"), "CC", varResultadosClient("icompanyid"), varResultadosClient("vchAddress1"), numbersReserve, ciudadCode, "", "", "", "", "", "", "P")
+                varResultadosClient.MoveNext
+                Wend
+            End If
+            varResultados.MoveNext
+        Wend
     End If
     cmdModificarInsertados(2).Enabled = varModificarNumeracionPublica And (grdEdicionNumeroPublico.Rows - grdEdicionNumeroPublico.FixedRows > 0 Or grdNumeroPublico.Rows - grdNumeroPublico.FixedRows > 0)
     Screen.MousePointer = vbDefault
+        
     Exit Sub
 ErrManager:
     SubGMuestraError
@@ -6117,7 +6154,7 @@ Private Sub Form_Load()
             Me.chkEnvioCorpLD.Value = 0
         End If
         Me.TxtIdVenta.Text = Trim(Me.proDatosProducto.proiVentaid)
-        Me.txtEnlace.Text = Trim(Me.proDatosProducto.proCodigoEnlace)
+        Me.TxtEnlace.Text = Trim(Me.proDatosProducto.proCodigoEnlace)
         Call SubFInicializarBotones
         
         'Consultar ciudad de instalación
@@ -6306,85 +6343,85 @@ Private Sub SubFPintarGridTiposLinea(Index As Integer)
                     
                         Select Case Trim(Me.proDatosProducto.proParametrosProducto.Item(varContadorAux).proCampo)
                             Case "vchUser1"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser1
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser1
                             Case "vchUser2"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser2
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser2
                             Case "vchUser3"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser3
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser3
                             Case "vchUser4"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser4
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser4
                             Case "vchUser5"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser5
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser5
                             Case "vchUser6"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser6
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser6
                             Case "vchUser7"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser7
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser7
                             Case "vchUser8"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser8
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser8
                             Case "vchUser9"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser9
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser9
                             Case "vchUser10"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser10
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser10
                             Case "vchUser11"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser11
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser11
                             Case "vchUser12"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser12
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser12
                             Case "vchUser13"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser13
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser13
                             Case "vchUser14"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser14
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser14
                             Case "vchUser15"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser15
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser15
                             Case "vchUser16"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser16
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser16
                             Case "vchUser17"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser17
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser17
                             Case "vchUser18"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser18
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser18
                             Case "vchUser19"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser19
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser19
                             Case "vchUser20"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser20
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser20
                             Case "vchUser21"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser21
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser21
                             Case "vchUser22"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser22
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser22
                             Case "vchUser23"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser23
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser23
                             Case "vchUser24"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser24
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser24
                             Case "vchUser25"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser25
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser25
                             Case "vchUser26"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser26
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser26
                             Case "vchUser27"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser27
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser27
                             Case "vchUser28"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser28
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser28
                             Case "vchUser29"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser29
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser29
                             Case "vchUser30"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser30
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser30
                             Case "vchUser31"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser31
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser31
                             Case "vchUser32"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser32
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser32
                             Case "vchUser33"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser33
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser33
                             Case "vchUser34"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser34
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser34
                             Case "vchUser35"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser35
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser35
                             Case "vchUser36"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser36
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser36
                             Case "vchUser37"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser37
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser37
                             Case "vchUser38"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser38
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser38
                             Case "vchUser39"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser39
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser39
                             Case "vchUser40"
-                                varValorLista.proValorId = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser40
+                                varValorLista.proValorID = Me.proDatosProducto.proDetalleDatosProducto.Item(varContador).proUser40
                         End Select
                         
                         If varValorLista.MetConsultar Then
@@ -6831,85 +6868,85 @@ Private Sub SubFPintarGridTiposLineaModificacion(Index As Integer)
                     
                         Select Case Trim(Me.proDatosProducto.proParametrosProducto.Item(varContadorAux).proCampo)
                             Case "vchUser1"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser1
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser1
                             Case "vchUser2"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser2
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser2
                             Case "vchUser3"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser3
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser3
                             Case "vchUser4"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser4
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser4
                             Case "vchUser5"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser5
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser5
                             Case "vchUser6"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser6
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser6
                             Case "vchUser7"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser7
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser7
                             Case "vchUser8"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser8
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser8
                             Case "vchUser9"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser9
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser9
                             Case "vchUser10"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser10
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser10
                             Case "vchUser11"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser11
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser11
                             Case "vchUser12"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser12
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser12
                             Case "vchUser13"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser13
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser13
                             Case "vchUser14"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser14
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser14
                             Case "vchUser15"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser15
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser15
                             Case "vchUser16"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser16
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser16
                             Case "vchUser17"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser17
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser17
                             Case "vchUser18"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser18
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser18
                             Case "vchUser19"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser19
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser19
                             Case "vchUser20"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser20
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser20
                             Case "vchUser21"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser21
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser21
                             Case "vchUser22"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser22
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser22
                             Case "vchUser23"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser23
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser23
                             Case "vchUser24"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser24
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser24
                             Case "vchUser25"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser25
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser25
                             Case "vchUser26"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser26
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser26
                             Case "vchUser27"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser27
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser27
                             Case "vchUser28"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser28
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser28
                             Case "vchUser29"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser29
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser29
                             Case "vchUser30"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser30
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser30
                             Case "vchUser31"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser31
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser31
                             Case "vchUser32"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser32
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser32
                             Case "vchUser33"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser33
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser33
                             Case "vchUser34"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser34
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser34
                             Case "vchUser35"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser35
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser35
                             Case "vchUser36"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser36
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser36
                             Case "vchUser37"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser37
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser37
                             Case "vchUser38"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser38
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser38
                             Case "vchUser39"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser39
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser39
                             Case "vchUser40"
-                                varValorLista.proValorId = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser40
+                                varValorLista.proValorID = Me.proDatosProducto.proNovedadDetalleDatosProducto.Item(varContador).proUser40
                         End Select
                         
                         If varValorLista.MetConsultar Then
@@ -8528,7 +8565,7 @@ End Sub
 Private Sub TxtEnlace_LostFocus()
 On Error GoTo ErrManager
     Me.TxtIdVenta.Text = ""
-    Me.TxtIdVenta.Text = Trim(Me.proDatosProducto.MetDevolverVenta(Trim(txtEnlace.Text)))
+    Me.TxtIdVenta.Text = Trim(Me.proDatosProducto.MetDevolverVenta(Trim(TxtEnlace.Text)))
 Exit Sub
 ErrManager:
     SubGMuestraError
@@ -8613,8 +8650,8 @@ End Sub
 
 Private Sub TxtIdVenta_LostFocus()
 On Error GoTo ErrManager
-      Me.txtEnlace.Text = ""
-      Me.txtEnlace.Text = Trim(Me.proDatosProducto.MetDevolverEnlace(Trim(TxtIdVenta.Text)))
+      Me.TxtEnlace.Text = ""
+      Me.TxtEnlace.Text = Trim(Me.proDatosProducto.MetDevolverEnlace(Trim(TxtIdVenta.Text)))
  Exit Sub
 ErrManager:
     SubGMuestraError

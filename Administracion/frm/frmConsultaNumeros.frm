@@ -4,28 +4,31 @@ Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#1.0#0"; "Threed32.OCX"
 Begin VB.Form frmConsultaNumeros 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Consultas de números"
-   ClientHeight    =   9540
+   ClientHeight    =   9615
    ClientLeft      =   3045
    ClientTop       =   990
    ClientWidth     =   9330
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   9540
+   ScaleHeight     =   9615
    ScaleWidth      =   9330
    Begin VB.CommandButton cmdCambiarEstado 
       Caption         =   "Ca&mbiar Estado"
+      Enabled         =   0   'False
       Height          =   315
-      Left            =   7320
+      Left            =   7440
       TabIndex        =   43
       Top             =   720
+      Visible         =   0   'False
       Width           =   1500
    End
    Begin Threed.SSPanel SSPanel2 
       Height          =   675
       Left            =   0
       TabIndex        =   40
-      Top             =   9150
+      Top             =   9120
       Width           =   9315
       _Version        =   65536
       _ExtentX        =   16431
@@ -96,15 +99,16 @@ Begin VB.Form frmConsultaNumeros
       BorderWidth     =   2
       BevelOuter      =   1
       Begin MSFlexGridLib.MSFlexGrid grdNumeros 
-         Height          =   5715
+         Height          =   5355
          Left            =   0
          TabIndex        =   17
          Top             =   240
          Width           =   9315
          _ExtentX        =   16431
-         _ExtentY        =   10081
+         _ExtentY        =   9446
          _Version        =   393216
          FixedCols       =   0
+         AllowBigSelection=   0   'False
          SelectionMode   =   1
          AllowUserResizing=   1
       End
@@ -123,7 +127,7 @@ Begin VB.Form frmConsultaNumeros
          BackColor       =   12620376
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "MS Sans Serif"
-            Size            =   9.76
+            Size            =   9.75
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -137,7 +141,7 @@ Begin VB.Form frmConsultaNumeros
       Height          =   3225
       Left            =   0
       TabIndex        =   23
-      Top             =   270
+      Top             =   360
       Width           =   9315
       _Version        =   65536
       _ExtentX        =   16431
@@ -242,18 +246,22 @@ Begin VB.Form frmConsultaNumeros
          End
          Begin VB.CommandButton cmdDeseleccionarTodos 
             Caption         =   "&Deseleccionar Todos"
+            Enabled         =   0   'False
             Height          =   285
             Left            =   3510
             TabIndex        =   11
             Top             =   1380
+            Visible         =   0   'False
             Width           =   1935
          End
          Begin VB.CommandButton cmdSeleccionarTodos 
             Caption         =   "&Seleccionar Todos"
+            Enabled         =   0   'False
             Height          =   285
             Left            =   3510
             TabIndex        =   10
             Top             =   1080
+            Visible         =   0   'False
             Width           =   1935
          End
          Begin Threed.SSPanel SSPanel3 
@@ -292,6 +300,7 @@ Begin VB.Form frmConsultaNumeros
             FixedRows       =   0
             FixedCols       =   0
             GridLines       =   0
+            SelectionMode   =   1
          End
          Begin VB.Label lblMensaje 
             BackColor       =   &H00C09258&
@@ -350,10 +359,10 @@ Begin VB.Form frmConsultaNumeros
       End
       Begin VB.ComboBox cboCodigoEstado 
          Height          =   315
-         Left            =   1710
+         Left            =   1680
          Style           =   2  'Dropdown List
          TabIndex        =   31
-         Top             =   450
+         Top             =   480
          Visible         =   0   'False
          Width           =   765
       End
@@ -384,7 +393,6 @@ Begin VB.Form frmConsultaNumeros
             Left            =   1440
             TabIndex        =   46
             Top             =   1320
-            Value           =   1  'Checked
             Width           =   2175
          End
          Begin VB.TextBox TxtContiene 
@@ -397,9 +405,9 @@ Begin VB.Form frmConsultaNumeros
          Begin VB.TextBox txtCantidad 
             BackColor       =   &H00E0E0E0&
             Height          =   315
-            Left            =   1650
+            Left            =   1680
             TabIndex        =   7
-            Top             =   570
+            Top             =   600
             Width           =   1965
          End
          Begin VB.TextBox txtNumeroFinal 
@@ -590,6 +598,9 @@ End Sub
 Private Sub cmdBuscar_Click()
     On Error GoTo ErrManager
     
+    Dim Script As String
+    Dim varResultados As ADODB.Recordset
+    
     'Validar los parámetros seleccionados
     If Me.cboCodigoCiudad.Text = "" Then
         MsgBox "Debe seleccionar la ciudad a buscar.", vbInformation, App.Title
@@ -607,63 +618,59 @@ Private Sub cmdBuscar_Click()
             Exit Sub
         End If
     End If
+
+    'Consulta para la validacion de que flujo seguir
+    Set varResultados = New ADODB.Recordset
+    Script = "SELECT vchMetododAtributo " & _
+                 "FROM AtributosSoapWebService " & _
+                 "WHERE vchMetodo = 'NetCracker'"
+    varResultados.Open Script, Me.proConexion
     
-    
-    Screen.MousePointer = 11
-    
-    Set Me.proNumeros = Nothing
-    Set Me.proNumeros = New colNumero
-    Set Me.proNumeros.proConexion = Me.proConexion
-    Set Me.proNumeros.proClasificacion = varClasificacion
-    
-    Me.proNumeros.proCantidadNumeros = Me.txtCantidad.Text
-    Me.proNumeros.proEstado = Me.cboCodigoEstado.Text
-    Me.proNumeros.proNumeroInicial = Me.txtNumeroInicial.Text
-    Me.proNumeros.proNumeroFinal = Me.txtNumeroFinal.Text
-    Me.proNumeros.proRegionCode = Me.cboCodigoCiudad.Text
-    Me.proNumeros.proUsarConjuntoClasificaciones = Me.chkClasificaciones.Value
+    While varResultados.EOF = False
+        If (varResultados("vchMetododAtributo") = "true") Then
+                    
+            Dim classPeticionWS As claPeticionNetcracker
+            Set classPeticionWS = New claPeticionNetcracker
+            Set classPeticionWS.proConexion = Me.proConexion
+            Screen.MousePointer = 11
+            Set Me.proNumeros = Nothing
+            Set Me.proNumeros = New colNumero
+            Set Me.proNumeros = classPeticionWS.ParametrosPeticionWs("getNumbers", cboNombreCiudad.Text, cboNombreEstado.Text, "TCRM", "Example_PMO-001", "Example_PMO-001", "1", "57", "", "", "", "", "", "", cboCodigoCiudad.Text, ChkConsecutivo.Value, Me.txtCantidad.Text, TxtContiene.Text, Me.txtNumeroInicial.Text, Me.txtNumeroFinal.Text, Me.grdClasificacion.Text, cboCodigoEstado.Text)
+            
+            If (dataWS = "") Then
+                Screen.MousePointer = 0
+                Exit Sub
+            End If
+            
+            Call SubFPintarGridNumeros
+                                            
+        Else
         
-    If Me.proNumeros.MetConsultarNumeros Then
-        Call SubFPintarGridNumeros
-    Else
-        MsgBox "Error al consultar los números.", vbCritical, App.Title
-        Screen.MousePointer = 0
-        Exit Sub
-    End If
-    
-    Dim resultWS As Object
-    Dim Tipo As String
-    Dim classWS As claRequestWs
-    Set classWS = New claRequestWs
-        
-    Tipo = "getNumbers"
-    Set classWS.proConexion = Me.proConexion
-    classWS.str_crm_in_use = "TCRM"
-    classWS.str_request_id = "Example_PMO_Assign_3090001"
-    classWS.str_transaction_id = "Example_PMO_Assign_3090001"
-    classWS.str_area_code = "1"
-    classWS.str_country_code = "57"
-    classWS.str_customer_name = "Pruebas PMO Inspira CLARO"
-    classWS.str_customer_id = "Client 101800000"
-    classWS.str_customer_id_type = "CC"
-    classWS.str_account_id = "101800000"
-    classWS.str_customer_location = "Address Client # 101800000"
-    classWS.str_number = "3000000"
-    classWS.str_crm_in_use = "TCRM"
-    classWS.str_request_id = "0000001"
-    classWS.str_area_code = "1"
-    classWS.str_country_code = "57"
-    classWS.str_city_code = "11001"
-    classWS.str_consecutive_number = "false"
-    classWS.str_quantity_numbers = "8"
-    classWS.str_transaction_id = "ao_gt38"
-    classWS.str_number_mask = "####33#"
-    classWS.str_initial_number = "0000000"
-    classWS.str_final_number = "9999999"
-    classWS.str_category = ""
-    classWS.str_status = ""
-    resultWS = classWS.RequestPeticionWs(Tipo)
-    
+            Screen.MousePointer = 11
+            Set Me.proNumeros = Nothing
+            Set Me.proNumeros = New colNumero
+            Set Me.proNumeros.proConexion = Me.proConexion
+            Set Me.proNumeros.proClasificacion = varClasificacion
+            
+            Me.proNumeros.proCantidadNumeros = Me.txtCantidad.Text
+            Me.proNumeros.proEstado = Me.cboCodigoEstado.Text
+            Me.proNumeros.proNumeroInicial = Me.txtNumeroInicial.Text
+            Me.proNumeros.proNumeroFinal = Me.txtNumeroFinal.Text
+            Me.proNumeros.proRegionCode = Me.cboCodigoCiudad.Text
+            Me.proNumeros.proUsarConjuntoClasificaciones = Me.chkClasificaciones.Value
+                
+            If Me.proNumeros.MetConsultarNumeros Then
+                Call SubFPintarGridNumeros
+            Else
+                MsgBox "Error al consultar los números.", vbCritical, App.Title
+                Screen.MousePointer = 0
+                Exit Sub
+            End If
+            
+        End If
+        varResultados.MoveNext
+    Wend
+   
     Screen.MousePointer = 0
     Exit Sub
 ErrManager:
@@ -912,7 +919,7 @@ Private Sub Form_Load()
             Me.lblCantidadRegistrosSeleccion.Caption = "Cantidad Registros"
             Me.cmdClasificar.Visible = True
              '/* 1.0.100  -  Inicio */
-            Me.cmdCambiarEstado.Visible = True
+            Me.cmdCambiarEstado.Visible = False
             '/* 1.0.100  -  Fin */
         Else
             Me.cmdDeseleccionarTodosNumeros.Visible = True
@@ -920,7 +927,7 @@ Private Sub Form_Load()
             Me.lblCantidadRegistrosSeleccion.Caption = "Cantidad Registros Seleccionados"
             Me.cmdClasificar.Visible = False
              '/* 1.0.100  -  Inicio */
-            Me.cmdCambiarEstado.Visible = True
+            Me.cmdCambiarEstado.Visible = False
             '/* 1.0.100  -  Fin */
         End If
     Exit Sub

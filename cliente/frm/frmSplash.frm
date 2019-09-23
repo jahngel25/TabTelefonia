@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#1.0#0"; "THREED32.OCX"
+Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#1.0#0"; "Threed32.OCX"
 Begin VB.Form frmSplash 
    BorderStyle     =   0  'None
    ClientHeight    =   1185

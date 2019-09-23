@@ -24,7 +24,7 @@ Begin VB.Form frmAdminNumeros
          Strikethrough   =   0   'False
       EndProperty
       Height          =   285
-      Left            =   60
+      Left            =   0
       TabIndex        =   11
       Top             =   1920
       Width           =   2055

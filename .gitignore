@@ -1,6 +1,9 @@
-
 cliente/vbp/EDCVoz.vbp
 Administracion/vbp/EDCAdminVoz.vbp
 *.vbp
 *.vbw
 TabVoz.vbg
+
+Administracion/vbp/EDCAdminVoz.vbp
+Administracion/vbp/EDCAdminVoz.vbw
+cliente/vbp/EDCVoz.vbp
